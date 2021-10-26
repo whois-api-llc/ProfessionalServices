@@ -1,5 +1,7 @@
 #!/bin/bash
 # Daily download of NRD 2.0 Feed
+# Professional.Services@whoisxmlapi.com
+#
 nooutput="--quiet"
 nrdlogfile="nrd-download.log"
 today=$(date '+%Y-%m-%d' -d "yesterday")
