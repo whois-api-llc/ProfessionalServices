@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "50378b70-1dca-4fe8-a394-74f96b55d8e5",
+		"name": "Threat Intel Platform APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Infrastructure Analysis API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TIP_InfrastructureAnalysis}}?apiKey={{TIPapiKey}}&domainName=coeurtek.com",
+					"host": [
+						"{{TIP_InfrastructureAnalysis}}"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "{{TIPapiKey}}"
+						},
+						{
+							"key": "domainName",
+							"value": "{{DomainName}}",
+							"description": "Global Domain Name",
+							"disabled": true
+						},
+						{
+							"key": "domainName",
+							"value": "coeurtek.com",
+							"description": "User Specified"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SSL Certificate Chain API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TIP_SSL_CertChain}}?apiKey={{TIPapiKey}}&domainName={{DomainName}}",
+					"host": [
+						"{{TIP_SSL_CertChain}}"
+					],
+					"query": [
+						{
+							"key": "apiKey",
+							"value": "{{TIPapiKey}}"
+						},
+						{
+							"key": "domainName",
+							"value": "{{DomainName}}",
+							"description": "Global Domain Name"
+						},
+						{
+							"key": "domainName",
+							"value": "google.com",
+							"description": "User Specified",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SSL Configuration Analysis API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TIP_SSL_ConfigAnalysis}}?domainName=google.com&apiKey={{TIPapiKey}}",
+					"host": [
+						"{{TIP_SSL_ConfigAnalysis}}"
+					],
+					"query": [
+						{
+							"key": "domainName",
+							"value": "{{DomainName}}",
+							"disabled": true
+						},
+						{
+							"key": "domainName",
+							"value": "google.com",
+							"description": "User Specified"
+						},
+						{
+							"key": "apiKey",
+							"value": "{{TIPapiKey}}",
+							"description": "Global Domain Name"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Domain Malware API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TIP_DomainMalware}}?domainName={{DomainName}}&domainName=google.com&apiKey={{TIPapiKey}}",
+					"host": [
+						"{{TIP_DomainMalware}}"
+					],
+					"query": [
+						{
+							"key": "domainName",
+							"value": "{{DomainName}}"
+						},
+						{
+							"key": "domainName",
+							"value": "google.com",
+							"description": "User Specified"
+						},
+						{
+							"key": "apiKey",
+							"value": "{{TIPapiKey}}",
+							"description": "Global Domain Name"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Connected Domains API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TIP_ConnectedDomains}}?domainName=google.com&apiKey={{TIPapiKey}}",
+					"host": [
+						"{{TIP_ConnectedDomains}}"
+					],
+					"query": [
+						{
+							"key": "domainName",
+							"value": "{{DomainName}}",
+							"description": "Use global env or specify domain name",
+							"disabled": true
+						},
+						{
+							"key": "domainName",
+							"value": "google.com",
+							"description": "User Specified"
+						},
+						{
+							"key": "apiKey",
+							"value": "{{TIPapiKey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Domain Reputation API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TIP_DomainReputation}}?domainName=google.com&apiKey={{TIPapiKey}}",
+					"host": [
+						"{{TIP_DomainReputation}}"
+					],
+					"query": [
+						{
+							"key": "domainName",
+							"value": "{{DomainName}}",
+							"description": "Global Domain Name",
+							"disabled": true
+						},
+						{
+							"key": "domainName",
+							"value": "google.com",
+							"description": "User Specified"
+						},
+						{
+							"key": "apiKey",
+							"value": "{{TIPapiKey}}"
+						},
+						{
+							"key": "mode",
+							"value": "fast",
+							"description": "Extensive tests will be disabled (Default)",
+							"disabled": true
+						},
+						{
+							"key": "mode",
+							"value": "full",
+							"description": "All tests will be performed",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
