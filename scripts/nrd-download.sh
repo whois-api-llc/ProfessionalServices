@@ -1,13 +1,17 @@
 #!/bin/bash
-# Daily download of NRD 2.0 Feed
+# Example script to download the NRD 2.0 data feed from WHOISXMLAPI.com
+# ed@whoisxmlapi.com
+# - crontab -
+# # m h  dom mon dow   command
+# 0 4 * * * /var/scripts/nrd-download.sh
 #
 nooutput="--quiet"
-nrdlogfile="nrd-download.log"
+nrdlogfile="wxa-nrd-download.log"
 today=$(date '+%Y-%m-%d' -d "yesterday")
 rundate=($date)
 odir="./"
 datadir="./"
-auth=at_YourAPIKey
+auth=<<<YourAPIKey>>>
 nrdendpoint="https://newly-registered-domains.whoisxmlapi.com/datafeeds/Newly_Registered_Domains_2.0/"
 # NOTE: nrdsub options are basic, enterprise, lite, professional, and ultimate
 nrdsub="basic"
