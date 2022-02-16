@@ -10,7 +10,7 @@ import time
 
 ws = create_connection("wss://nrd-stream.whoisxmlapi.com/ultimate")
 
-apiKey = "at_xZK2rardlymYkflUSs99vqsEyKoaj"
+apiKey = "at_abcdefghijklmnopqrstuvwxyz"
 
 print("Sending API Key...")
 ws.send(apiKey)
