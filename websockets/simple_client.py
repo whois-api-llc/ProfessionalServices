@@ -1,5 +1,6 @@
 # Simple Websocket client to connect to wss: service and read response after sending apiKey
 # Be sure to specify your API key
+# Requirements: pip3 install websocket-client
 # Specifications can be found at: https://domain-registration-streaming.whoisxmlapi.com/specifications/data-streaming
 # Sample provided by WHOISXMLAPI.COM 
 
