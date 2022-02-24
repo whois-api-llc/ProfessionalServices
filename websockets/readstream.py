@@ -16,8 +16,7 @@ ws = create_connection("wss://nrd-stream.whoisxmlapi.com/ultimate")
 
 # define environment variable: API_KEY and read it in
 
-apiKey = "at_xZK2rardlymYkflUSs99vqsEyKoaj"
-# apiKey = os.getenv('API_KEY')
+apiKey = os.getenv('API_KEY')
 
 print("Sending API Key...")
 ws.send(apiKey)
