@@ -16,7 +16,8 @@ ws = create_connection("wss://nrd-stream.whoisxmlapi.com/ultimate")
 
 # define environment variable: API_KEY and read it in
 
-apiKey = os.getenv('API_KEY')
+apiKey = "at_xZK2rardlymYkflUSs99vqsEyKoaj"
+# apiKey = os.getenv('API_KEY')
 
 print("Sending API Key...")
 ws.send(apiKey)
@@ -39,7 +40,13 @@ while True:
         recTxCounter += 1
         try:
             record = json.loads(json_line)
-            print("\n-----------------\nRecord no. %d:\n%s"%(recCounter, str(record)))
+            domainReason = record['reason']
+            domainName = record['domainName']
+            IANAID = record['registrarIANAID']
+            print("\n-> Reason: %-12s %-5d domainName: %s\n"%(domainReason, IANAID, domainName))
+#
+# print additional information
+#            print("\n-------------\nReason: %s, Record no. %d:\n%s"%(domainReason, recCounter, str(record)))
         except Exception as e:
             print("Record no. %d FAILDED TO DECODE."%(recCounter))
             print("The error was: %s"%str(e))
