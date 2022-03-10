@@ -26,6 +26,14 @@ print("Receiving WHOIS data (press ctrl/c to terminate)...")
 
 txCounter = 0
 recCounter = 0
+verbCount = 0
+unknownVerb = 0
+domainAdded = 0
+domainUpdated =0
+domainDeleted = 0
+domainDiscovered = 0
+domainDropped = 0
+
 while True:
     txCounter += 1
     result = ws.recv()
@@ -42,7 +50,27 @@ while True:
             domainReason = record['reason']
             domainName = record['domainName']
             IANAID = record['registrarIANAID']
-            print("\n-> Reason: %-12s %-5d domainName: %s\n"%(domainReason, IANAID, domainName))
+
+            if domainReason == "added":
+               domainAdded += 1
+               verbCount = domainAdded
+            elif domainReason == "discovered":
+               domainDiscovered += 1
+               verbCount = domainDiscovered
+            elif domainReason == "updated":
+               domainUpdated += 1
+               verbCount = domainAdded
+            elif domainReason == "deleted":
+               domainDeleted += 1
+               verbCount = domainDeleted
+            elif domainReason == "dropped":
+               domainDropped += 1
+               verbCount = domainDropped
+            else:
+               unknownVerb += 1
+               verbCount = unknownVerb
+
+            print("\n-> Verb: %-12s %9d %5d domainName: %s\n"%(domainReason, verbCount, IANAID, domainName))
 #
 # print additional information
 #            print("\n-------------\nReason: %s, Record no. %d:\n%s"%(domainReason, recCounter, str(record)))
