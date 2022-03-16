@@ -1,0 +1,38 @@
+Our servers are leveraging Connection: keep-alive
+———————————————————————————————————————————————————————————————————————————
+import logging, requests, json
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+
+apiKey = 'at_...'
+session = requests.Session()
+
+url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' \
+    + 'domainName=whoisxmlapi.com&apiKey=' + apiKey
+
+for i in range(3): session.get(url)
+
+url = 'https://domains-subdomains-discovery.whoisxmlapi.com/api/v1'
+body = json.dumps({"apiKey": apiKey, "domains": {"include": ["amazon.*"]}})
+
+for i in range(3): session.post(url, data=body)
+
+url = 'https://emailverification.whoisxmlapi.com/api/v1?'\
+    + 'emailAddress=support@whoisxmlapi.com&apiKey=' + apiKey
+
+for i in range(3): session.get(url)
+———————————————————————————————————————————————————————————————————————————
+Starting new HTTPS connection (1): www.whoisxmlapi.com:443
+https://www.whoisxmlapi.com:443 "GET /whoisserver/WhoisService?domainName=whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
+https://www.whoisxmlapi.com:443 "GET /whoisserver/WhoisService?domainName=whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
+https://www.whoisxmlapi.com:443 "GET /whoisserver/WhoisService?domainName=whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
+Starting new HTTPS connection (1): domains-subdomains-discovery.whoisxmlapi.com:443
+https://domains-subdomains-discovery.whoisxmlapi.com:443 "POST /api/v1 HTTP/1.1" 200 None
+https://domains-subdomains-discovery.whoisxmlapi.com:443 "POST /api/v1 HTTP/1.1" 200 None
+https://domains-subdomains-discovery.whoisxmlapi.com:443 "POST /api/v1 HTTP/1.1" 200 None
+Starting new HTTPS connection (1): emailverification.whoisxmlapi.com:443
+https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
+https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
+https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
