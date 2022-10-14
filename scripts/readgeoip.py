@@ -4,7 +4,6 @@
 #
 import sys
 import ipaddress
-import getopt
 
 try:
     import pandas as pd
