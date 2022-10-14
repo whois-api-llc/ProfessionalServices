@@ -39,7 +39,7 @@ while (currRow < totalRows):
     ipAddrStartStr = str(ipaddress.ip_address(int(ipStartMark)))
     ipAddrStart.append(ipAddrStartStr)
 
-    # check to see if its on the last row
+    # check to see if its the last row
     if currRow+1 == totalRows:
         ipAddrEndStr = str(ipaddress.ip_address(int(ipStartMark))) 
         ipNextMark = ipStartMark
@@ -55,11 +55,7 @@ while (currRow < totalRows):
     print("Current:", ipStartMark, "Next:", ipNextMark, " Beg:", ipAddrStartStr, "End:", ipAddrEndStr)
 
 # Adjust to your requirements
-# In this example, the following columns will be dropped 
-# columns: mark,isp,connectionType,country,region,city,lat,lng,
-#          postalCode,timezone,geonameId
-
-print("-> Dropping 6 Columns, adjust as needed to meet your needs.")
+print("-> Dropping 5 Columns, adjust as needed to meet your requirements.")
 df.drop(columns=['isp','connectionType','postalCode','timezone','geonameId'], inplace=True)
 
 print("-> Inserting columns: nextMark, ipv4start, ipv4end")
