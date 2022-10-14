@@ -68,5 +68,5 @@ df.insert(2,"ipv4start", ipAddrStart)
 df.insert(3,"ipv4end", ipAddrEnd)
 
 print("-> Write file", IPGEOOutputFile)
-df.to_csv(IPGEOOutputFile)
+df.to_csv(IPGEOOutputFile, index=False)
 print("-> Done")
