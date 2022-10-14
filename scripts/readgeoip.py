@@ -10,6 +10,7 @@ try:
     import pandas as pd
 except:
     print("This script requires pandas be installed.")
+    print("   https://pandas.pydata.org/docs/getting_started/install.html")
     sys.exit(1)
 
 if len(sys.argv) < 3:
@@ -70,7 +71,7 @@ print("-> Done")
 """
 Example:
 
-THe WHOISXMLApi IPv4 Geolocation data-file sample (4 lines):
+THe WHOISXMLApi IPv4 Geolocation data-file sample (header + 4 rows):
 
 cat geoip4addresses.csv
 mark,isp,connectionType,country,region,city,lat,lng,postalCode,timezone,geonameId
