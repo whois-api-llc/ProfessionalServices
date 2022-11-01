@@ -3,6 +3,7 @@
 # Requirements: pip3 install websocket-client
 # Specifications can be found at: https://domain-registration-streaming.whoisxmlapi.com/specifications/data-streaming
 # Sample provided by WHOISXMLAPI.COM, credit goes to https://pypi.org/project/websocket-client/ 
+# Professional.Services@whoisxmlapi.com
 
 #!/usr/bin/env python3
 
