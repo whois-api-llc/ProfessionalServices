@@ -1,5 +1,5 @@
 # WHOISXMLAPI.COM - Code provided as-is with no warrenty or support
-# 2022-10-23 v1.0 ed@whoisxmlapi.com
+# 2022-10-23 v1.0 Professional.Services@whoisxmlapi.com
 # script to read IPv4 Geolocation data file provided by WHOISXMLAPI.COM
 #
 import sys
