@@ -1,6 +1,6 @@
 #!/bin/bash
 # Example script to download the NRD 2.0 data feed from WHOISXMLAPI.com
-# ed@whoisxmlapi.com
+# Professional.Services@whoisxmlapi.com
 # - crontab -
 # # m h  dom mon dow   command
 # 0 4 * * * /var/scripts/nrd-download.sh
