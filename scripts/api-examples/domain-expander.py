@@ -5,15 +5,23 @@
 #  WHOISXMLAPI GitHub Repository can be found at https://github.com/whois-api-llc/
 # The purpose of this file is to demonstrate how to use various APIs
 # Contact sales@whoisxmlapi.com for more information
+# Min Req: Python 3.6+
 
 import sys
+# pip install subdomains-lookup
 import subdomainslookup as sd
+# pip install whois-api
 import whoisapi as who
+# pip install domain-reputation
 import domainreputation as dr
+# pip install dns-lookup-api
 import dnslookupapi as dns
+# pip install reverse-ip
 import reverseip as rip
+# pip install simple-geoip
 import simple_geoip as geoip
 
+# Visit www.whoisxmlapi.com, create a free account or sign-in to obtain your API key
 apiKey="<YOURAPIKEY>"
 
 def domainReputation(domainName):
