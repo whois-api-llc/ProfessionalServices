@@ -6,6 +6,8 @@
 # The purpose of this file is to demonstrate how to use various APIs
 # Contact sales@whoisxmlapi.com for more information
 # Min Req: Python 3.6+
+# To check the versions of the modules installed, use 'pip show <module-name>'.  For example: pip show whois-api
+# NOTE: This code is writen at a very basic level for demonstration purposes.
 
 import sys
 # pip install subdomains-lookup
