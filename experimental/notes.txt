@@ -1,0 +1,56 @@
+#!/bin/bash
+
+fileDate=$(date '+%Y-%m-%d' -d "yesterday")
+
+for file in typo*full.enriched*.csv
+do
+        echo $file
+
+        echo "Processing $file"
+
+        D=$(echo $file | cut -b 15-24)
+
+        python3 ./dgabuster.py $D ./ ./output/ 20
+done
+
+
+import sys
+
+try:
+    import pandas as pd
+except:
+    print("This script requires pandas.  Use: pip install pandas")
+    sys.exit(1)
+
+if len(sys.argv) < 4:
+    print("\nARG: YYYY-MM-DD inputput_path output_path dga_tolerance\n")
+    sys.exit(1)
+
+pdate = sys.argv[1]
+input_filepath = sys.argv[2]
+output_filepath = sys.argv[3]
+dga_level = sys.argv[4]
+
+# construct filenames and paths
+leading_filename = "typosquatting."
+trailing_filename = ".daily.full.enriched.csv"
+
+typo_filename = input_filepath + leading_filename + pdate + trailing_filename
+
+dga_output_filename = output_filepath + "dga." + pdate + trailing_filename
+
+dga_filter = "total_no_of_grp_members >= " + dga_level
+
+print("\nProcessing    : ", pdate)
+print("InFilename    : ", typo_filename)
+print("OutFilename   : ", dga_output_filename)
+print("DGA Tolerance : ", dga_level)
+print("DGA Filter    : ", dga_filter)
+
+df = pd.read_csv(typo_filename)
+
+df2 = df.query(dga_filter,inplace=False)
+
+print("Number of rows: ", str(len(df2.index)), "\n")
+
+df2.to_csv(dga_output_filename, encoding="utf-8",index=True)
