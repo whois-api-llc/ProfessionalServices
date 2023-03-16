@@ -57,34 +57,38 @@ def dnsLookUps(domainName):
     sdRIP = rip.Client(apiKey)
     sdGeo = geoip.GeoIP(apiKey)
 
-    sdResponse = sdDNS.get(domainName)
+    sdResponse = sdDNS.get(domainName, 'A,MX,NS,TXT')
 
-    for rec in sdResponse.records_by_type['A']:
-        ipAddr = str(rec.value)
-        print("\t\tA Record:" + ipAddr)
-        print("\t\t\tIP Geo Location:")
-        geoData = sdGeo.lookup(ipAddr)
-        print("\t\t\t\tCountry: {}, Region: {}, City: {}".format(
-            geoData['location']['country'],
-            geoData['location']['region'],
-            geoData['location']['city']))
-        print("\t\t\t\tLong: {}, Lat: {}, Zipcode {}, Timezone: {}".format(
-            geoData['location']['lng'],
-            geoData['location']['lat'],
-            geoData['location']['postalCode'],
-            geoData['location']['timezone'] ) )
-        result = sdRIP.data(str(rec.value))
-        for record in result.result:
-            print("\t\t\tReverse IP: {}, visited: {}".format(record.name, record.last_visit))
+    if 'A' in sdResponse.records_by_type:
+        for rec in sdResponse.records_by_type['A']:
+            ipAddr = str(rec.value)
+            print("\t\tA Record:" + ipAddr)
+            print("\t\t\tIP Geo Location:")
+            geoData = sdGeo.lookup(ipAddr)
+            print("\t\t\t\tCountry: {}, Region: {}, City: {}".format(
+                geoData['location']['country'],
+                geoData['location']['region'],
+                geoData['location']['city']))
+            print("\t\t\t\tLong: {}, Lat: {}, Zipcode {}, Timezone: {}".format(
+                geoData['location']['lng'],
+                geoData['location']['lat'],
+                geoData['location']['postalCode'],
+                geoData['location']['timezone'] ) )
+            result = sdRIP.data(str(rec.value))
+            for record in result.result:
+                print("\t\t\tReverse IP: {}, visited: {}".format(record.name, record.last_visit))
 
-    for rec in sdResponse.records_by_type['MX']:
-        print("\t\tMX Record:" + str(rec.value))
+    if 'MX' in sdResponse.records_by_type:
+        for rec in sdResponse.records_by_type['MX']:
+            print("\t\tMX Record:" + str(rec.value))
 
-    for rec in sdResponse.records_by_type['NS']:
-        print("\t\tNS Record:" + str(rec.value))
+    if 'NS' in sdResponse.records_by_type:
+        for rec in sdResponse.records_by_type['NS']:
+            print("\t\tNS Record:" + str(rec.value))
 
-    for rec in sdResponse.records_by_type['TXT']:
-        print("\t\tTXT Record:" + str(rec.value))
+    if 'TXT' in sdResponse.records_by_type:
+        for rec in sdResponse.records_by_type['TXT']:
+            print("\t\tTXT Record:" + str(rec.value))
 
 def whoisRecord(domainName):
     print("\tWHOIS Record")
