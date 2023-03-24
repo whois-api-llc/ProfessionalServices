@@ -122,3 +122,8 @@ df.to_csv(IPGEOOutputFile, index=False)
 # end elapsed time counter and print results
 stopwatch = timeit.default_timer()
 print(f"-> Done, Elapsed time: {stopwatch-startwatch:0.2f} seconds\n")
+
+#>>> list(summarize_address_range(startip, endip))
+#[IPv4Network('63.223.64.0/18'),
+# IPv4Network('63.223.128.0/17'),
+# IPv4Network('63.224.0.0/17')]
