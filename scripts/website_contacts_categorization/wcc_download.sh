@@ -2,7 +2,7 @@
 #
 # Set the API key. Recommend not hard coding this but making it read from an environmental variable.
 #    for example apiKey = os.getenv('WXAAPIKEY')
-apiKey="<APIKEY>"
+apiKey="<YOUR_API_KEY>"
 echo "Download Completed."
 # Format todays date in YYYY-MM-DD format
 today=$(date '+%Y_%m_%d')
