@@ -8,19 +8,28 @@
 # Min Req: Python 3.6+
 # To check the versions of the modules installed, use 'pip show <module-name>'.  For example: pip show whois-api
 # NOTE: This code is writen at a very basic level for demonstration purposes.
-
-from urllib.request import urlopen, pathname2url
-# load WHOISXMLAPI modules
+#
+# <<< load WHOISXMLAPI modules >>>
+# pip install whois-api
 import whoisapi as who
+# pip install subdomains-lookup
+import subdomainslookup as sds
+# pip install domain-reputation
 import domainreputation as dr
+# pip install dns-lookup-api
 import dnslookupapi as dns
+# pip install simple-geoip
 import simple_geoip as geoip
+# pip install reverse-mx
+import reversemx as rmx
+#
 # standard python modules
+from urllib.request import urlopen, pathname2url
 import json
 import sys
+from datetime import datetime
 
-# set the API key
-apiKey = ''
+apiKey = '<YOURAPIKEY>'
 
 def domainReputation(domainName):
 
@@ -35,19 +44,27 @@ def domainReputation(domainName):
 
 def whoisRecord(domainName):
 	
-	print("\tWHOIS Record")
+	print("\n\tWHOIS Record")
 
 	whoClient = who.Client(api_key=apiKey)
 
 	whois = whoClient.data(domainName)
 
-	print("\t\t\tWHOIS Creation Date:" + str(whois.created_date_normalized))
-	print("\t\t\tWHOIS Server(s):" + whois.whois_server)
-	for x in whois.name_servers.host_names:
-		print("\t\t\t\t" + x)
-	print("\t\t\tWHOIS Registrant:" + whois.registrant.name)
-	print("\t\t\tWHOIS Registrar:" + whois.registrar_name)
-	print("\t\t\tWHOIS Contact Email:" + whois.contact_email)
+	creation_date = datetime.strptime(str(whois.created_date_normalized), "%Y-%m-%d %H:%M:%S")
+	t_date = datetime.today().strftime('%Y-%m-%d')
+	todays_date = datetime.strptime(t_date, "%Y-%m-%d")
+	delta = todays_date - creation_date
+
+	print("\t\tCreation Date:" + str(whois.created_date_normalized))
+
+	if delta.days <= 30:
+		print(f"\t\tWARNING: Newly created domain, less than {delta.days} old.")
+	else:
+		print(f"\t\tDomain name is {delta.days} days old.")
+
+	print("\t\tWHOIS Registrant:" + whois.registrant.name)
+	print("\t\tWHOIS Registrar:" + whois.registrar_name)
+	print("\t\tWHOIS Contact Email:" + whois.contact_email)
 
 
 def run_email_results(result):
@@ -55,6 +72,8 @@ def run_email_results(result):
 	i = 0
 
 	sdDNS = dns.Client(apiKey)
+	rmxclient = rmx.Client(apiKey)
+	sdsClient = sds.Client(apiKey)
 
 	emailAddr = result['emailAddress']
 
@@ -112,7 +131,6 @@ def run_email_results(result):
 			nsResponse = sdDNS.get(ns, 'A')
 
 			if 'A' in nsResponse.records_by_type:
-				#print(">>>>>>>> LEN ", str(nsResponse.records_by_type['A']))
 				for nsrec in nsResponse.records_by_type['A']:
 					geoByIP(ns, nsrec['value'])
 					print("\t\t\t\t", ns, nsrec['value'])
@@ -135,8 +153,49 @@ def run_email_results(result):
 		if 'A' in sdResponse.records_by_type:
 			for rec in sdResponse.records_by_type['A']:
 				geoByIP(tmp, rec['value'])
+				rmxresult = rmxclient.data(tmp)
+				print(f"\t\t\t\tThere are {rmxresult.size} domains on this email server.")
 
-	return 1
+	sdsResponse = sdsClient.get(domainName)
+
+	if sdsResponse.result.count == 0:
+		print(f"\n\tWARNING: {domainName} has no subdomains")
+	else:
+		print(f"\n\tThe domain \"{domainName}\" has {sdsResponse.result.count} subdomains.")
+	
+
+	printSSLcert(domainName)
+
+	return 1	
+
+def printSSLcert(domainName):
+
+	api_url = 'https://ssl-certificates.whoisxmlapi.com/api/v1'
+
+	url = api_url\
+    		+ '?domainName=' + pathname2url(domainName)\
+    		+ '&apiKey=' + pathname2url(apiKey)
+	
+	result = json.loads(urlopen(url).read().decode('utf8'))
+
+	print("\n\tSSL Certificate Information:")
+
+	try:
+		if result['code'] >= 400:
+			print(f"Unable to get certificate information, error {result['code']}")
+			return 0;
+	except:
+		cert = result['certificates'][0]
+
+		print(f"\t\tIP.............: {result['ip']}")
+		print(f"\t\tPort...........: {result['port']}")
+		print(f"\t\tChain Hierachy.: {cert['chainHierarchy']}")
+		print(f"\t\tValidation type: {cert['validationType']}")
+		print(f"\t\tValid from.....: {cert['validFrom']}")
+		print(f"\t\tValid to.......: {cert['validTo']}")
+		print(f"\t\tSubject CN.....: {cert['subject']['commonName']}")
+		print(f"\t\tIssuer Country.: {cert['issuer']['country']}")
+		print(f"\t\tOrganization...: {cert['issuer']['organization']}")
 
 def geobyEmail(emailAddr):
 
@@ -186,7 +245,7 @@ def load_email(emailAddr):
 if __name__ == '__main__':
 
 	print("\nKYC Evaluation:")
-	print("\n\t1) E-mail Address")
+	print("\n\t1) E-mail Address (default)")
 	print("\t2) E-mail Address and Source IP Address")
 	print("\t3) E-Mail Address, Source IP Address, and Domain Name")
 	print("\tq) Quit\n")
@@ -196,7 +255,7 @@ if __name__ == '__main__':
 	if eval_selection == "q":
 		sys.exit(0)
 
-	emailAddr = input("Enter e-mail Address: ")
+	emailAddr = input("Enter e-mail Address: ")	
 
 	retcode = load_email(emailAddr)
 
@@ -205,6 +264,8 @@ if __name__ == '__main__':
 
 	domainName = emailAddr[emailAddr.index('@') + 1 : ]
 
-	print("\nChecking Domain name reputation for", domainName)
+	print("\n\tChecking Domain name reputation for", domainName)
 
 	domainReputation(domainName)
+
+	whoisRecord(domainName)
