@@ -33,7 +33,7 @@ import sys
 import timeit
 from datetime import datetime
 
-apiKey = 'at_R48Sg6wAkCKhJDpWU457eyxVOeMCs'
+apiKey = ''
 
 def whoisHistory(domainName):
 
