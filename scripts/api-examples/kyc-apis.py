@@ -10,6 +10,7 @@
 # NOTE: This code is writen at a very basic level for demonstration purposes.
 #
 # <<< load WHOISXMLAPI modules >>>
+# You can load each module as needed or run 'pip install -r requirements.txt"
 # pip install whois-api
 import whoisapi as who
 # pip install subdomains-lookup
@@ -27,9 +28,10 @@ import reversemx as rmx
 from urllib.request import urlopen, pathname2url
 import json
 import sys
+import timeit
 from datetime import datetime
 
-apiKey = '<YOURAPIKEY>'
+apiKey = 'at_R48Sg6wAkCKhJDpWU457eyxVOeMCs'
 
 def domainReputation(domainName):
 
@@ -244,28 +246,44 @@ def load_email(emailAddr):
 
 if __name__ == '__main__':
 
-	print("\nKYC Evaluation:")
-	print("\n\t1) E-mail Address (default)")
-	print("\t2) E-mail Address and Source IP Address")
-	print("\t3) E-Mail Address, Source IP Address, and Domain Name")
-	print("\tq) Quit\n")
+	# if no arguments are present, run interactive
+
+	if len(sys.argv) == 1:
+
+		print("\nKYC Evaluation:")
+		print("\n\t1) E-mail Address (default)")
+		print("\t2) E-mail Address and Source IP Address")
+		print("\t3) E-Mail Address, Source IP Address, and Domain Name")
+		print("\tq) Quit\n")
 	
-	eval_selection = input("Enter selection: ")
+		eval_selection = input("Enter selection: ")
 
-	if eval_selection == "q":
-		sys.exit(0)
+		if eval_selection == "q":
+			sys.exit(0)
 
-	emailAddr = input("Enter e-mail Address: ")	
+		emailAddr = input("Enter e-mail Address: ")
 
-	retcode = load_email(emailAddr)
+		startwatch = timeit.default_timer()	
 
-	if retcode == 0:
-		sys.exit(0)
+		retcode = load_email(emailAddr)
 
-	domainName = emailAddr[emailAddr.index('@') + 1 : ]
+		if retcode == 0:
+			sys.exit(0)
 
-	print("\n\tChecking Domain name reputation for", domainName)
+		domainName = emailAddr[emailAddr.index('@') + 1 : ]
 
-	domainReputation(domainName)
+		print("\n\tChecking Domain name reputation for", domainName)
 
-	whoisRecord(domainName)
+		domainReputation(domainName)
+
+		whoisRecord(domainName)
+
+		if eval_selection == '2':
+			print("Phase 2 Under Construction")
+
+		if eval_selection == '3':
+			print("Phase 3 Under Construction")
+
+		stopwatch = timeit.default_timer()
+
+		print(f"\nDone, Elapsed time: {stopwatch-startwatch:0.2f} seconds.")
