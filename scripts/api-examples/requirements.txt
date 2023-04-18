@@ -1,0 +1,9 @@
+# Requirements for WHOISXMLAPI
+# pip install -r requirements.txt
+#
+whois-api
+subdomains-lookup
+domain-reputation
+dns-lookup-api
+simple-geoip
+reverse-mx
