@@ -7,3 +7,4 @@ domain-reputation
 dns-lookup-api
 simple-geoip
 reverse-mx
+whois-history
