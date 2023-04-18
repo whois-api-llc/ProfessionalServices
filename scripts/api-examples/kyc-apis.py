@@ -23,6 +23,8 @@ import dnslookupapi as dns
 import simple_geoip as geoip
 # pip install reverse-mx
 import reversemx as rmx
+# pip install whois-history
+import whoishistory as whohist
 #
 # standard python modules
 from urllib.request import urlopen, pathname2url
@@ -32,6 +34,13 @@ import timeit
 from datetime import datetime
 
 apiKey = 'at_R48Sg6wAkCKhJDpWU457eyxVOeMCs'
+
+def whoisHistory(domainName):
+
+	whohistClient = whohist.ApiClient(apiKey)
+
+	print("\n\tThe number of WHOIS historical records for this domain is ", whohistClient.preview(domainName))
+
 
 def domainReputation(domainName):
 
@@ -261,7 +270,7 @@ if __name__ == '__main__':
 		if eval_selection == "q":
 			sys.exit(0)
 
-		emailAddr = input("Enter e-mail Address: ")
+		emailAddr = input("\nEnter e-mail Address: ")
 
 		startwatch = timeit.default_timer()	
 
@@ -277,6 +286,8 @@ if __name__ == '__main__':
 		domainReputation(domainName)
 
 		whoisRecord(domainName)
+
+		whoisHistory(domainName)
 
 		if eval_selection == '2':
 			print("Phase 2 Under Construction")
