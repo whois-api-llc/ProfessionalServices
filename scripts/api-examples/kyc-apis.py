@@ -1,5 +1,5 @@
 # kyc-apis by WHOIS.py
-# Developed by Professional.Services@whoisxmlapi.com  v1.0   17 April 2023
+# Developed by Professional.Services@whoisxmlapi.com  v1.2   17 April 2023
 # This file is provided "as-is" with no warranty or support
 # You will need to obtain a valid API key with sufficient credits from whoisxmlapi.com
 #  WHOISXMLAPI GitHub Repository can be found at https://github.com/whois-api-llc/
@@ -32,14 +32,17 @@ import json
 import sys
 import timeit
 from datetime import datetime
+from collections import Counter
 
-apiKey = ''
+# recommend using obtaining the API key from an environment variable than hard coding it
+apiKey = 'SET_YOUR_API_KEY_HERE'
+countryCodes = []
 
 def whoisHistory(domainName):
 
 	whohistClient = whohist.ApiClient(apiKey)
 
-	print("\n\tThe number of WHOIS historical records for this domain is ", whohistClient.preview(domainName))
+	print("\n\tThe number of WHOIS historical records for this domain is: ", whohistClient.preview(domainName))
 
 
 def domainReputation(domainName):
@@ -98,9 +101,9 @@ def run_email_results(result):
 
 	print(f"\t\tSMTP Check........... {result['smtpCheck']}")
 
-	if result['smtpCheck'] == 'false':
-		print("\t\t\tFailed SMTP check, done.\n")
-		return 0
+	# if result['smtpCheck'] == 'false':
+	#	print("\t\t\tFailed SMTP check, done.\n")
+	#	return 0
 
 	print(f"\t\tDNS Check............ {result['dnsCheck']}")
 
@@ -123,6 +126,8 @@ def run_email_results(result):
 	geoResults = geobyEmail(emailAddr)
 
 	print(f"\t\tGeo Location data....")
+
+	countryCodes.append(geoResults['location']['country'])
 
 	print(f"\t\t\tCountry: {geoResults['location']['country']}, State: {geoResults['location']['region']}, City: {geoResults['location']['city']}")
 
@@ -198,6 +203,8 @@ def printSSLcert(domainName):
 	except:
 		cert = result['certificates'][0]
 
+		countryCodes.append(cert['issuer']['country'])
+
 		print(f"\t\tIP.............: {result['ip']}")
 		print(f"\t\tPort...........: {result['port']}")
 		print(f"\t\tChain Hierachy.: {cert['chainHierarchy']}")
@@ -231,6 +238,8 @@ def geoByIP(fqdn, ipAddr):
 		geoData['location']['country'],
 		geoData['location']['region'],
 		geoData['location']['city']))
+
+	countryCodes.append(geoData['location']['country'])
 
 
 def load_email(emailAddr):
@@ -274,6 +283,8 @@ if __name__ == '__main__':
 
 		startwatch = timeit.default_timer()	
 
+		print("\nStarting data collection process... ")
+
 		retcode = load_email(emailAddr)
 
 		if retcode == 0:
@@ -289,6 +300,15 @@ if __name__ == '__main__':
 
 		whoisHistory(domainName)
 
+		countryCodes.sort()
+
+		countryCounter = Counter(countryCodes)
+
+		print(f"\n\tCountries reported during this interrogation: {str(len(countryCounter))}\n\n\t\t", end="")
+
+		for cnt in countryCounter:
+			print(cnt, " ", end="")
+
 		if eval_selection == '2':
 			print("Phase 2 Under Construction")
 
@@ -297,4 +317,4 @@ if __name__ == '__main__':
 
 		stopwatch = timeit.default_timer()
 
-		print(f"\nDone, Elapsed time: {stopwatch-startwatch:0.2f} seconds.")
+		print(f"\n\nDone, Elapsed time: {stopwatch-startwatch:0.2f} seconds.")
