@@ -39,24 +39,33 @@ https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@
 https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
 
 Another simple example:
-———————————————————————————————————————————————————————————————————————————
+------------------------------------------------------------------------------
 import logging, requests, json
 import os, sys
 
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logger.addHandler(logging.StreamHandler())
+# uncomment the next 3 lines to see logging info
+#logger = logging.getLogger()
+#logger.setLevel(logging.DEBUG)
+#logger.addHandler(logging.StreamHandler())
 
 apiKey = os.getenv('WXAAPI')
 
+domainNames = ['google.com','amazon.com', 'microsoft.com', 'cisco.com', 'apple.com']
+
 session = requests.Session()
 
-url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' \
-            + 'domainName=whoisxmlapi.com&apiKey=' + apiKey
+idx = 0
 
-for i in range(25): session.get(url)
+for d in domainNames:
 
-for i in range(25):
-    r = session.post(url)
-    print(r.text)
-    
+    print("Sending request for: ", d, end='')
+
+    url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' \
+        + 'domainName=' + domainNames[idx] + '&apiKey=' + apiKey + "&outputFormat=JSON" \
+        + "&da=1"
+
+    data = session.get(url)
+
+    createDate = json.loads(data.text)
+
+    print(" was created on", createDate['WhoisRecord']['createdDate'])
