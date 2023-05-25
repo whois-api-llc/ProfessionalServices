@@ -37,3 +37,26 @@ Starting new HTTPS connection (1): emailverification.whoisxmlapi.com:443
 https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
 https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
 https://emailverification.whoisxmlapi.com:443 "GET /api/v1?emailAddress=support@whoisxmlapi.com&apiKey=at_... HTTP/1.1" 200 None
+
+Another simple example:
+———————————————————————————————————————————————————————————————————————————
+import logging, requests, json
+import os, sys
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+logger.addHandler(logging.StreamHandler())
+
+apiKey = os.getenv('WXAAPI')
+
+session = requests.Session()
+
+url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' \
+            + 'domainName=whoisxmlapi.com&apiKey=' + apiKey
+
+for i in range(25): session.get(url)
+
+for i in range(25):
+    r = session.post(url)
+    print(r.text)
+    
