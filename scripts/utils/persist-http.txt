@@ -58,7 +58,7 @@ idx = 0
 
 for d in domainNames:
 
-    print("Sending request for: ", d, end='')
+    print("Domainname: ", d, end='')
 
     url = 'https://www.whoisxmlapi.com/whoisserver/WhoisService?' \
         + 'domainName=' + domainNames[idx] + '&apiKey=' + apiKey + "&outputFormat=JSON" \
@@ -69,3 +69,12 @@ for d in domainNames:
     createDate = json.loads(data.text)
 
     print(" was created on", createDate['WhoisRecord']['createdDate'])
+    
+Expected OUTPUT:
+----------------------------------------------------------------------
+Domainname:  google.com was created on  1997-09-15T07:00:00+0000
+Domainname:  amazon.com was created on  1994-11-01T05:00:00+0000
+Domainname:  microsoft.com was created on  1991-05-02T04:00:00+0000
+Domainname:  cisco.com was created on  1987-05-14T04:00:00+0000
+Domainname:  apple.com was created on  1987-02-19T00:00:00Z
+
