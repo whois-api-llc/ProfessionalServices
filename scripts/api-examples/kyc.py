@@ -29,12 +29,16 @@ import whoishistory as whohist
 # standard python modules
 from urllib.request import urlopen, pathname2url
 import json
-import sys
+import sys, os
 import timeit
 from datetime import datetime
 from collections import Counter
 
+#hard coded
 apiKey = '<SET_API_KEY>'
+# or obtained from environmental variable
+# apiKey = os.getenv("APIKEYNAME")
+
 countryCodes = []
 
 def whoisHistory(domainName):
@@ -269,8 +273,6 @@ if __name__ == '__main__':
 
 		print("\nKYC Evaluation:")
 		print("\n\t1) E-mail Address (default)")
-		print("\t2) E-mail Address and Source IP Address")
-		print("\t3) E-Mail Address, Source IP Address, and Domain Name")
 		print("\tq) Quit\n")
 	
 		eval_selection = input("Enter selection: ")
@@ -307,12 +309,6 @@ if __name__ == '__main__':
 
 		for cnt in countryCounter:
 			print(cnt, " ", end="")
-
-		if eval_selection == '2':
-			print("Phase 2 Under Construction")
-
-		if eval_selection == '3':
-			print("Phase 3 Under Construction")
 
 		stopwatch = timeit.default_timer()
 
