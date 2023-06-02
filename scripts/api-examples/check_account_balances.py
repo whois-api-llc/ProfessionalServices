@@ -43,20 +43,51 @@ def check_balances():
 
     for x in range(total_products):
         match productID[x]:
+            # WHOIS API
             case 1:
                 total_credits = 1000000000
+            # Email Verification API
             case 7:
                 total_credits = 3000
+            # IP Geolocation API
             case 8:
                 total_credits = 1000
+            # DRS API
             case 14:
                 total_credits = 2000
+            # Domain Reputation API
             case 20:
                 total_credits = 3000
+            # Website Categorization API
             case 21:
                 total_credits = 2000
+            # IP Netblocks API
             case 23:
                 total_credits = 100
+            # Domain Availability API
+            case 25:
+                total_credits = 100
+            # DNS Lookup API
+            case 26
+                total_credits = 100
+            # Screenshot API
+            case 27:
+                total_credits = 100
+            # Website Contacts API
+            case 29:
+                 total_credits = 100
+            # Real-time Domain Streaming
+            case 39:
+                total_credits = 100
+            # Newly Registered Domains 2.0
+            case 55:
+                total_credits = 100
+            # MAC Address API
+            case 57:
+                total_credits = 100
+            # SSL Certificates API
+            case 61:
+                 total_credits = 100
             # Add/Remove cases as desired to match products your interested in
             case default:
                 total_credits = 500
