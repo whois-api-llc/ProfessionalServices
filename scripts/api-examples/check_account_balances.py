@@ -7,6 +7,7 @@ except ImportError:
     from urllib2 import urlopen
 import sys
 import json
+import os
 
 productID = []
 productName = []
@@ -68,7 +69,7 @@ def check_balances():
             case 25:
                 total_credits = 100
             # DNS Lookup API
-            case 26
+            case 26:
                 total_credits = 100
             # Screenshot API
             case 27:
