@@ -67,7 +67,8 @@ def check_balances():
                 total_credits = 100
             # Domain Availability API
             case 25:
-                total_credits = 100
+                # Use -1 to ignore
+                total_credits = -1
             # DNS Lookup API
             case 26:
                 total_credits = 100
@@ -93,20 +94,22 @@ def check_balances():
             case default:
                 total_credits = 500
 
-        remaining_credits = total_credits - productCredits[x]
+        if total_credits > 0:
 
-        percent = round(calc_percentage(productCredits[x],total_credits))
+            remaining_credits = total_credits - productCredits[x]
 
-        if remaining_credits < 0:
-            result = "negative"
-            sendWebhooks[x] = 1
-        elif remaining_credits == 0:
-            result = "exhausted"
-            sendWebhooks[x] = 1
-        else:
-            result = "positive"
+            percent = round(calc_percentage(productCredits[x],total_credits))
 
-        print(f"\t{productID[x]},{productName[x]},{productCredits[x]},{total_credits},{remaining_credits},{percent},{result}")
+            if remaining_credits < 0:
+                result = "negative"
+                sendWebhooks[x] = 1
+            elif remaining_credits == 0:
+                result = "exhausted"
+                sendWebhooks[x] = 1
+            else:
+                result = "positive"
+
+            print(f"\t{productID[x]},{productName[x]},{productCredits[x]},{total_credits},{remaining_credits},{percent},{result}")
 
 def generate_webhooks():
 
