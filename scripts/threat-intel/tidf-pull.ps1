@@ -1,4 +1,6 @@
-# The code provided is provided "as-is" for demonstration purposes.
+ # The code provided is provided "as-is" for demonstration purposes.
+ # The file will format the date as yesterdays date. 
+ # You can add this to the Windows Schedular to run daily.
 
 # Set colors
 $redText = [char]27 + '[31m'
