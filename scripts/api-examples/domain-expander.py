@@ -9,7 +9,7 @@
 # To check the versions of the modules installed, use 'pip show <module-name>'.  For example: pip show whois-api
 # NOTE: This code is writen at a very basic level for demonstration purposes.
 
-import sys
+import sys, os
 # pip install subdomains-lookup
 import subdomainslookup as sd
 # pip install whois-api
