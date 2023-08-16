@@ -25,6 +25,8 @@ import simple_geoip as geoip
 
 # Visit www.whoisxmlapi.com, create a free account or sign-in to obtain your API key
 apiKey="<YOURAPIKEY>"
+# the preference is to use
+# apiKey = os.getenv('WXAapiKey')
 
 def domainReputation(domainName):
     print("\tDomain Reputation")
