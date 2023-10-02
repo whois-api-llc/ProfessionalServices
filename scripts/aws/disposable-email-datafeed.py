@@ -1,4 +1,5 @@
-# rename to lambda_function.py
+# rename to lambda_function.py or use 
+# from disposable-email-datafeed.py import rename_function(event,context)
 #
 import os
 import boto3
