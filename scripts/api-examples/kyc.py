@@ -1,5 +1,5 @@
 # kyc.py by WHOISXMLAPI.COM
-# Developed by Professional.Services@whoisxmlapi.com  v1.2   17 April 2023
+# Developed by Professional.Services@whoisxmlapi.com  v1.5   19 October 2023
 # This file is provided "as-is" with no warranty or support
 # You will need to obtain a valid API key with sufficient credits from whoisxmlapi.com
 #  WHOISXMLAPI GitHub Repository can be found at https://github.com/whois-api-llc/
@@ -7,7 +7,7 @@
 # Contact sales@whoisxmlapi.com for more information
 # Min Req: Python 3.11+
 # To check the versions of the modules installed, use 'pip show <module-name>'.  For example: pip show whois-api
-# NOTE: This code is writen at a very basic level for demonstration purposes.
+# This code is writen at a very basic level for demonstration purposes.
 #
 # <<< load WHOISXMLAPI modules >>>
 # You can load each module as needed or run 'pip install -r requirements.txt"
@@ -25,20 +25,20 @@ import simple_geoip as geoip
 import reversemx as rmx
 # pip install whois-history
 import whoishistory as whohist
+# pip install ip-netblocks
+import ipnetblocks as ipnb
 #
 # standard python modules
 from urllib.request import urlopen, pathname2url
 import json
-import sys, os
+import sys
 import timeit
 from datetime import datetime
 from collections import Counter
 
-#hard coded
-apiKey = '<SET_API_KEY>'
-# or obtained from environmental variable
-# apiKey = os.getenv("APIKEYNAME")
+# Set your API Key. Best practice is to set it from an environmental variable.
 
+apiKey = 'at_**************************************'
 countryCodes = []
 
 def whoisHistory(domainName):
@@ -46,6 +46,21 @@ def whoisHistory(domainName):
 	whohistClient = whohist.ApiClient(apiKey)
 
 	print("\n\tThe number of WHOIS historical records for this domain is: ", whohistClient.preview(domainName))
+
+def ipNetBlock(ipAddress):
+
+    ipnbClient = ipnb.Client(apiKey)
+
+    ipnbResponse = ipnbClient.get(ipAddress)
+
+    if ipnbResponse.count > 0:
+        asn = ipnbResponse['inetnums'][0]['AS']['asn']
+        blockName = ipnbResponse['inetnums'][0]['AS']['name']
+    else:
+        asn = 0
+        blockName = "Unknown"
+
+    return asn, blockName
 
 
 def domainReputation(domainName):
@@ -153,6 +168,8 @@ def run_email_results(result):
 				for nsrec in nsResponse.records_by_type['A']:
 					geoByIP(ns, nsrec['value'])
 					print("\t\t\t\t", ns, nsrec['value'])
+					ipASN, ipBlockName = ipNetBlock(nsrec['value'])
+					print("\t\t\t\t ASN:", ipASN, "Name:", ipBlockName)
 
 	print("\tNow checking for DNS MX domain records such as domain creation dates, country codes")
 
@@ -174,6 +191,8 @@ def run_email_results(result):
 				geoByIP(tmp, rec['value'])
 				rmxresult = rmxclient.data(tmp)
 				print(f"\t\t\t\tThere are {rmxresult.size} domains on this email server.")
+				ipASN, ipBlockName = ipNetBlock(rec['value'])
+				print(f"\t\t\t\tASN:", ipASN, "Name:", ipBlockName)
 
 	sdsResponse = sdsClient.get(domainName)
 
@@ -208,7 +227,11 @@ def printSSLcert(domainName):
 
 		countryCodes.append(cert['issuer']['country'])
 
+		ipASN, ipBlockName = ipNetBlock(result['ip'])
+
 		print(f"\t\tIP.............: {result['ip']}")
+		print(f"\t\tNetblock ASN...: {ipASN}")
+		print(f"\t\tNetblock Name..: {ipBlockName}")
 		print(f"\t\tPort...........: {result['port']}")
 		print(f"\t\tChain Hierachy.: {cert['chainHierarchy']}")
 		print(f"\t\tValidation type: {cert['validationType']}")
@@ -272,9 +295,9 @@ if __name__ == '__main__':
 	if len(sys.argv) == 1:
 
 		print("\nKYC Evaluation:")
-		print("\n\t1) E-mail Address (default)")
+		print("\n\t1) E-mail Address")
 		print("\tq) Quit\n")
-	
+
 		eval_selection = input("Enter selection: ")
 
 		if eval_selection == "q":
@@ -309,6 +332,12 @@ if __name__ == '__main__':
 
 		for cnt in countryCounter:
 			print(cnt, " ", end="")
+
+		if eval_selection == '2':
+			print("Phase 2 Under Construction")
+
+		if eval_selection == '3':
+			print("Phase 3 Under Construction")
 
 		stopwatch = timeit.default_timer()
 
