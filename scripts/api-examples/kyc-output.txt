@@ -1,0 +1,90 @@
+KYC Evaluation:
+
+        1) E-mail Address
+        q) Quit
+
+Enter selection: 1
+
+Enter e-mail Address: support@whoisxmlapi.com
+
+Starting data collection process...
+
+        E-mail: support@whoisxmlapi.com
+                Format Check......... true
+                SMTP Check........... true
+                DNS Check............ true
+                Free Email Check..... false
+                Disposible Check..... false
+                Geo Location data....
+                        Country: US, State: California, City: Los Angeles
+        E-Mail Verification Results.. PASSED
+
+        Now checking for DNS NS records for whoisxmlapi.com
+                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                                 carl.ns.cloudflare.com 108.162.193.106
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                                 carl.ns.cloudflare.com 173.245.59.106
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                                 carl.ns.cloudflare.com 172.64.33.106
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                                 elle.ns.cloudflare.com 108.162.192.110
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                                 elle.ns.cloudflare.com 173.245.58.110
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                                 elle.ns.cloudflare.com 172.64.32.110
+                                 ASN: 13335 Name: CLOUDFLARENET
+        Now checking for DNS MX domain records such as domain creation dates, country codes
+                There are 5 MX Record(s):
+                        alt1.aspmx.l.google.com, Country: US, State/Region: Texas, City: Dallas Downtown
+                                There are 300 domains on this email server.
+                                ASN: 15169 Name: GOOGLE
+                        aspmx2.googlemail.com, Country: US, State/Region: Texas, City: Dallas Downtown
+                                There are 300 domains on this email server.
+                                ASN: 15169 Name: GOOGLE
+                        aspmx.l.google.com, Country: US, State/Region: California, City: The Greenhouse
+                                There are 300 domains on this email server.
+                                ASN: 15169 Name: GOOGLE
+                        aspmx3.googlemail.com, Country: US, State/Region: Texas, City: Dallas Downtown
+                                There are 300 domains on this email server.
+                                ASN: 15169 Name: GOOGLE
+                        alt2.aspmx.l.google.com, Country: US, State/Region: California, City: Mountain View
+                                There are 300 domains on this email server.
+                                ASN: 15169 Name: GOOGLE
+
+        The domain "whoisxmlapi.com" has 162 subdomains.
+
+        SSL Certificate Information:
+                IP.............: 104.26.12.210
+                Netblock ASN...: 13335
+                Netblock Name..: CLOUDFLARENET
+                Port...........: 443
+                Chain Hierachy.: end-user
+                Validation type: organization
+                Valid from.....: 2022-05-29 00:00:00 UTC
+                Valid to.......: 2023-05-29 23:59:59 UTC
+                Subject CN.....: sni.cloudflaressl.com
+                Issuer Country.: US
+                Organization...: Cloudflare, Inc.
+
+        Checking Domain name reputation for whoisxmlapi.com
+                Domain Reputation score passed:  98.58
+
+        WHOIS Record
+                Creation Date:2009-03-19 21:47:17
+                Domain name is 5326 days old.
+                WHOIS Registrant:Registration Private
+                WHOIS Registrar:GoDaddy.com, LLC
+                WHOIS Contact Email:abuse@godaddy.com
+
+        The number of WHOIS historical records for this domain is:  27
+
+        Countries reported during this interrogation: 1
+
+                US
+
+Done, Elapsed time: 59.06 seconds.
