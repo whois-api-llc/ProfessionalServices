@@ -171,14 +171,14 @@ def run_email_results(result):
 					ipASN, ipBlockName = ipNetBlock(nsrec['value'])
 					print("\t\t\t\t ASN:", ipASN, "Name:", ipBlockName)
 
-	print("\tNow checking for DNS MX domain records such as domain creation dates, country codes")
+	print("\tNow checking DNS MX domain records for", domainName)
 
 	mxRecCount = len(result['mxRecords'])
 
 	print("\t\tThere are", str(mxRecCount), "MX Record(s):")
 
 	if mxRecCount == 0:
-		print("\t\tBecause there are zero MX records, this is not a valid email configuration, done.\n")
+		print("\t\tBecause there are zero MX records, this is not a valid email configuration.\n")
 		sys.exit(1)
 
 	for mx_records in result['mxRecords']:
