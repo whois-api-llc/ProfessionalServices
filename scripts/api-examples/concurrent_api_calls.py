@@ -46,8 +46,8 @@ def extract_data(api_responses):
     return data
 
 async def main():
-    # get domains from csv file
-    df = pd.read_csv('/Users/sunnyqu/Desktop/t1000.csv', header=None, usecols=[0])
+    # get domains from sample csv file
+    df = pd.read_csv('t1000.csv', header=None, usecols=[0])
     domains = df[0].tolist()
     print(domains)
 
@@ -58,7 +58,7 @@ async def main():
     # ClientSession
     async with aiohttp.ClientSession() as session:
         # CSV and csvwriter
-        with open('/Users/sunnyqu/Desktop/result.csv', 'w', newline='') as csvfile:
+        with open('result.csv', 'w', newline='') as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(['Domain Name', 'Creation Date', 'Registrant'])
 
