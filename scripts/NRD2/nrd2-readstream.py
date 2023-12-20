@@ -63,7 +63,7 @@ while True:
          else:
             unknownVerb += 1
 
-         print("\n[Record#:%d] reason:%-12s IANAID:%-5d domainName:%s  (domainRegistrar:%s)\n"%(recCounter, domainReason, IANAID, domainName, domainRegistrar))
+         print("\n[Record#:%d] reason:%-12s registrarIANAID:%-5d domainName:%s  (registrarName:%s)\n"%(recCounter, reason, registrarIANAID, domainName, registrarName))
 
       except Exception as e:
          print("ERROR: Record no. %d FAILED TO DECODE."%(recCounter))
