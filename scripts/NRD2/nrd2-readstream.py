@@ -28,7 +28,6 @@ print("Receiving WHOIS data (press ctrl/c to terminate)...")
 
 txCounter = 0
 recCounter = 0
-verbCount = 0
 unknownVerb = 0
 domainAdded = 0
 domainUpdated =0
@@ -56,21 +55,16 @@ while True:
 
          if domainReason == "added":
             domainAdded += 1
-            verbCount = domainAdded
          elif domainReason == "discovered":
             domainDiscovered += 1
-            verbCount = domainDiscovered
          elif domainReason == "updated":
             domainUpdated += 1
-            verbCount = domainAdded
          elif domainReason == "dropped":
             domainDropped += 1
-            verbCount = domainDropped
          else:
             unknownVerb += 1
-            verbCount = unknownVerb
 
-         print("\n[Record#:%d] reason:%-12s verbCount:%-9d IANAID:%-5d domainName:%s  (domainRegistrar:%s)\n"%(recCounter, domainReason, verbCount, IANAID, domainName, domainRegistrar))
+         print("\n[Record#:%d] reason:%-12s IANAID:%-5d domainName:%s  (domainRegistrar:%s)\n"%(recCounter, domainReason, IANAID, domainName, domainRegistrar))
 
       except Exception as e:
          print("ERROR: Record no. %d FAILED TO DECODE."%(recCounter))
