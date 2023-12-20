@@ -63,9 +63,6 @@ while True:
          elif domainReason == "updated":
             domainUpdated += 1
             verbCount = domainAdded
-         elif domainReason == "deleted":
-            domainDeleted += 1
-            verbCount = domainDeleted
          elif domainReason == "dropped":
             domainDropped += 1
             verbCount = domainDropped
@@ -73,11 +70,11 @@ while True:
             unknownVerb += 1
             verbCount = unknownVerb
 
-         print("\n[rec#: %d] Verb: %-12s %9d %5d domainName: %s  (%s)\n"%(recCounter, domainReason, verbCount, IANAID, domainName, domainRegistrar))
+         print("\n[rec#:%d] V:%-12s VC:%9d IANAID:%5d D:%s  (DR:%s)\n"%(recCounter, domainReason, verbCount, IANAID, domainName, domainRegistrar))
       except Exception as e:
          print("ERROR: Record no. %d FAILED TO DECODE."%(recCounter))
-         print("The error was: %s"%str(e))
-   print("\n+++End of transaction %d, added %d, discovered: %d, dropped %d"%(txCounter, domainAdded, domainDiscovered, domainDropped))
+         print("ERROR: %s"%str(e))
+   print("\n+++End of transaction %d, added: %d, discovered: %d, updated: %d, dropped: %d"%(txCounter, domainAdded, domainDiscovered, domainUpdated, domainDropped))
    print("%d records received in transaction %d, %d in total: "%(recTxCounter, txCounter, recCounter))
 # close the websocket
 ws.close()
