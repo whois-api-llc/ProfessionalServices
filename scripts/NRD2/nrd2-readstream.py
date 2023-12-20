@@ -70,7 +70,8 @@ while True:
             unknownVerb += 1
             verbCount = unknownVerb
 
-         print("\n[rec#:%d] V:%-12s VC:%-9d IANAID:%-5d D:%s  (DR:%s)\n"%(recCounter, domainReason, verbCount, IANAID, domainName, domainRegistrar))
+         print("\n[Record#:%d] reason:%-12s verbCount:%-9d IANAID:%-5d domainName:%s  (domainRegistrar:%s)\n"%(recCounter, domainReason, verbCount, IANAID, domainName, domainRegistrar))
+
       except Exception as e:
          print("ERROR: Record no. %d FAILED TO DECODE."%(recCounter))
          print("ERROR: %s"%str(e))
