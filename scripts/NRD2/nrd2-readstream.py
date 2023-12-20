@@ -31,7 +31,6 @@ recCounter = 0
 unknownVerb = 0
 domainAdded = 0
 domainUpdated =0
-domainDeleted = 0
 domainDiscovered = 0
 domainDropped = 0
 
