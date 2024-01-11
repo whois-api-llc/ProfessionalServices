@@ -1,0 +1,35 @@
+
+Input Parameters:
+
+   ipnetblock_contacts_file   file_to_rewrite_complete_records_to   file_for_just_email_contacts  TLD
+
+Example:
+
+   python ipblock-email-ownership.py ip_netblocks.2024-01-06.full.contacts.csv rewrite-recs.csv email-list.csv .gov
+
+Sample output of rewrite-recs.csv
+  organization,IANA,Internet Assigned Numbers Authority,abuse@iana.org,+1-310-301-5820,US,Los Angeles
+  organization,ORG-ARAD1-AP,APNIC Research and Development,helpdesk@apnic.net,+61-7-38583100,AU,
+  maintainer,RIPE-NCC-HM-MNT,,,,,
+  organization,ORG-APNI3-AP,"Asia Pacific Network Information Center, Pty. Ltd.",helpdesk@apnic.net,,AU,
+  maintainer,APNIC-HM,,helpdesk@apnic.net|netops@apnic.net,,,
+  maintainer,MAINT-APNICRANDNET,,ggm@apnic.net|hm-changed@apnic.net,,,
+  maintainer,MAINT-CHINANET-FJ,,fjnic@fjdcb.fz.fj.cn,,,
+  maintainer,MAINT-WPL-AU,,support@gtelecom.com.au,,,
+  role,AIC3-AP,APNICRANDNET Infrastructure Contact,research@apnic.net,+61 7 3858 3100,AU,
+  role,HM20-AP,APNIC Hostmaster,helpdesk@apnic.net,+61 7 3858 3100,AU,
+  ...
+
+Sample output of email-list.csv
+  VLM16-RIPE,MaiettaV@state.gov
+  UDT-9,richard.yates@tigta.treas.gov
+  RY81-ARIN,richard.yates@tigta.treas.gov
+  CSBOE,jfitzgerald@isd.sbcounty.gov
+  BA218-ARIN,barikawa@eob.ca.gov
+  EOB,barikawa@eob.ca.gov
+  JLB27-ARIN,postmaster@tsp.gov
+  FRTIB,noc@tsp.gov
+  FRTIB,servicedesk@tsp.gov
+  JG1536-ARIN,jgalicic@cftc.gov
+  ...
+
