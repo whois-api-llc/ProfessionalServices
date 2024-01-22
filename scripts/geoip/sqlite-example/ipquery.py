@@ -29,7 +29,7 @@ if __name__=='__main__':
         print(row)
 
 # example:
-# python query-ipgeo-db.py ipgeo.db 4.4.4.4
+# python query-ipgeo-db.py ipgeo.db 8.8.8.8
 #
 # output:
-# (67372032, 'Level 3 Communications, Inc.', '', 'US', 'Hawaii', 'Woodlawn', 21.31808, -157.80676, '', '-10:00', 5854894)
+# (134744064, 'Google LLC', '', 'US', 'Ohio', 'Glenmont', 40.52006, -82.09737, '44628', '-05:00', 4833344)
