@@ -16,47 +16,235 @@ Starting data collection process...
                 Free Email Check..... false
                 Disposible Check..... false
                 Geo Location data....
-                        Country: US, State: California, City: Los Angeles
+                        Country: US, State: California, City: Rex Manor
         E-Mail Verification Results.. PASSED
 
         Now checking for DNS NS records for whoisxmlapi.com
-                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
-                                 carl.ns.cloudflare.com 108.162.193.106
-                                 ASN: 13335 Name: CLOUDFLARENET
-                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
-                                 carl.ns.cloudflare.com 173.245.59.106
-                                 ASN: 13335 Name: CLOUDFLARENET
-                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                        carl.ns.cloudflare.com, Country: SG, State/Region: , City: Singapore
                                  carl.ns.cloudflare.com 172.64.33.106
                                  ASN: 13335 Name: CLOUDFLARENET
-                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                        carl.ns.cloudflare.com, Country: SG, State/Region: , City: Singapore
+                                 carl.ns.cloudflare.com 173.245.59.106
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        carl.ns.cloudflare.com, Country: US, State/Region: California, City: Mission Bay
+                                 carl.ns.cloudflare.com 108.162.193.106
+                                 ASN: 13335 Name: CLOUDFLARENET
+                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: Mission Bay
                                  elle.ns.cloudflare.com 108.162.192.110
                                  ASN: 13335 Name: CLOUDFLARENET
-                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
-                                 elle.ns.cloudflare.com 173.245.58.110
-                                 ASN: 13335 Name: CLOUDFLARENET
-                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: South Beach
+                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: Haight-Ashbury
                                  elle.ns.cloudflare.com 172.64.32.110
                                  ASN: 13335 Name: CLOUDFLARENET
-        Now checking for DNS MX domain records such as domain creation dates, country codes
+                        elle.ns.cloudflare.com, Country: US, State/Region: California, City: Haight-Ashbury
+                                 elle.ns.cloudflare.com 173.245.58.110
+                                 ASN: 13335 Name: CLOUDFLARENET
+        Now checking DNS MX domain records for whoisxmlapi.com
                 There are 5 MX Record(s):
-                        alt1.aspmx.l.google.com, Country: US, State/Region: Texas, City: Dallas Downtown
+                        alt1.aspmx.l.google.com, Country: US, State/Region: Texas, City: Richardson
                                 There are 300 domains on this email server.
                                 ASN: 15169 Name: GOOGLE
-                        aspmx2.googlemail.com, Country: US, State/Region: Texas, City: Dallas Downtown
+                        aspmx2.googlemail.com, Country: US, State/Region: Florida, City: Winterset Shores Estates Mobile Home Park
                                 There are 300 domains on this email server.
                                 ASN: 15169 Name: GOOGLE
-                        aspmx.l.google.com, Country: US, State/Region: California, City: The Greenhouse
+                        aspmx.l.google.com, Country: US, State/Region: California, City: Rex Manor
                                 There are 300 domains on this email server.
                                 ASN: 15169 Name: GOOGLE
-                        aspmx3.googlemail.com, Country: US, State/Region: Texas, City: Dallas Downtown
+                        aspmx3.googlemail.com, Country: US, State/Region: California, City: Rex Manor
                                 There are 300 domains on this email server.
                                 ASN: 15169 Name: GOOGLE
-                        alt2.aspmx.l.google.com, Country: US, State/Region: California, City: Mountain View
+                        alt2.aspmx.l.google.com, Country: US, State/Region: Georgia, City: North Canton
                                 There are 300 domains on this email server.
                                 ASN: 15169 Name: GOOGLE
 
-        The domain "whoisxmlapi.com" has 162 subdomains.
+        Checking Domain name reputation for whoisxmlapi.com
+                Domain Reputation score passed:  88.58
+
+        WHOIS Record
+                Creation Date:2009-03-19 21:47:17
+                Domain name is 5452 days old.
+                WHOIS Registrant:Registration Private
+                WHOIS Registrar:GoDaddy.com, LLC
+                WHOIS Contact Email:abuse@godaddy.com
+
+        The number of WHOIS historical records for this domain is:  28
+
+        Countries reported during this interrogation: 2
+
+                SG  US
+        Checking Domain Threat Intelligence Data for whoisxmlapi.com
+                No IoC records found for whoisxmlapi.com
+
+        Checking IP Threat Intelligence Data for whoisxmlapi.com
+
+                Threat Intelligence for NS IP 172.64.33.106:
+                No IoC records found for 172.64.33.106
+
+                Threat Intelligence for NS IP 173.245.59.106:
+                No IoC records found for 173.245.59.106
+
+                Threat Intelligence for NS IP 108.162.193.106:
+                No IoC records found for 108.162.193.106
+
+                Threat Intelligence for NS IP 108.162.192.110:
+                No IoC records found for 108.162.192.110
+
+                Threat Intelligence for NS IP 172.64.32.110:
+                No IoC records found for 172.64.32.110
+
+                Threat Intelligence for NS IP 173.245.58.110:
+                No IoC records found for 173.245.58.110
+
+                Threat Intelligence for MX IP 142.250.141.27:
+                No IoC records found for 142.250.141.27
+
+                Threat Intelligence for MX IP 108.177.104.26:
+                No IoC records found for 108.177.104.26
+
+                Threat Intelligence for MX IP 142.251.2.27:
+                No IoC records found for 142.251.2.27
+
+                Threat Intelligence for MX IP 142.250.152.27:
+                No IoC records found for 142.250.152.27
+
+                Threat Intelligence for MX IP 142.250.115.27:
+                No IoC records found for 142.250.115.27
+
+        Checking Domain Threat Intelligence Data for whoisxmlapi.com
+
+                Threat Intelligence for NS domain carl.ns.cloudflare.com:
+                No IoC records found for carl.ns.cloudflare.com
+
+                Threat Intelligence for NS domain elle.ns.cloudflare.com:
+                No IoC records found for elle.ns.cloudflare.com
+
+                Threat Intelligence for MX domain alt1.aspmx.l.google.com:
+                No IoC records found for alt1.aspmx.l.google.com
+
+                Threat Intelligence for MX domain aspmx2.googlemail.com:
+                No IoC records found for aspmx2.googlemail.com
+
+                Threat Intelligence for MX domain aspmx.l.google.com:
+                No IoC records found for aspmx.l.google.com
+
+                Threat Intelligence for MX domain aspmx3.googlemail.com:
+                No IoC records found for aspmx3.googlemail.com
+
+                Threat Intelligence for MX domain alt2.aspmx.l.google.com:
+                No IoC records found for alt2.aspmx.l.google.com
+
+        Website Categorization for whoisxmlapi.com
+
+                Processing Domain: whoisxmlapi.com
+                ASN: 13335
+                Domain: https://www.cloudflare.com
+                Name: CLOUDFLARENET
+                Route: 104.26.0.0/20
+                Type: Content
+                Domain Name: whoisxmlapi.com
+                Categories:
+                        Confidence: 1, Name: Computer and Internet Security
+                        Confidence: 0.81, Name: Business and Economy
+                        Confidence: 0.76, Name: Reference and Research
+                Created Date: 2009-03-19T21:47:17+00:00
+                Website Responded: True
+
+
+        Website Categorization for NS Domains:
+
+                Processing Domain: carl.ns.cloudflare.com
+                ASN: 13335
+                Domain: https://www.cloudflare.com
+                Name: CLOUDFLARENET
+                Route: 108.162.193.0/24
+                Type: Content
+                Domain Name: carl.ns.cloudflare.com
+                Categories:
+                        Confidence: 0.7, Name: Computer and Internet Security
+                Created Date: N/A
+                Website Responded: True
+
+
+                Processing Domain: elle.ns.cloudflare.com
+                ASN: 13335
+                Domain: https://www.cloudflare.com
+                Name: CLOUDFLARENET
+                Route: 108.162.192.0/24
+                Type: Content
+                Domain Name: elle.ns.cloudflare.com
+                Categories:
+                        Confidence: 0.7, Name: Computer and Internet Security
+                Created Date: 2009-02-17T22:07:54+00:00
+                Website Responded: True
+
+
+        Website Categorization for MX Domains:
+
+                Processing Domain: alt1.aspmx.l.google.com
+                ASN: 15169
+                Domain: https://about.google/intl/en/
+                Name: GOOGLE
+                Route: 108.177.104.0/24
+                Type: Content
+                Domain Name: alt1.aspmx.l.google.com
+                Categories:
+                        Confidence: 0.82, Name: Search Engines
+                Created Date: N/A
+                Website Responded: True
+
+
+                Processing Domain: aspmx2.googlemail.com
+                ASN: 15169
+                Domain: https://about.google/intl/en/
+                Name: GOOGLE
+                Route: 173.194.77.0/24
+                Type: Content
+                Domain Name: aspmx2.googlemail.com
+                Categories:
+                        Confidence: 0.9, Name: Web-based Email
+                Created Date: N/A
+                Website Responded: True
+
+
+                Processing Domain: aspmx.l.google.com
+                ASN: 15169
+                Domain: https://about.google/intl/en/
+                Name: GOOGLE
+                Route: 142.250.138.0/24
+                Type: Content
+                Domain Name: aspmx.l.google.com
+                Categories:
+                        Confidence: 0.82, Name: Search Engines
+                Created Date: N/A
+                Website Responded: True
+
+
+                Processing Domain: aspmx3.googlemail.com
+                ASN: 15169
+                Domain: https://about.google/intl/en/
+                Name: GOOGLE
+                Route: 142.250.152.0/24
+                Type: Content
+                Domain Name: aspmx3.googlemail.com
+                Categories:
+                        Confidence: 0.9, Name: Web-based Email
+                Created Date: N/A
+                Website Responded: True
+
+
+                Processing Domain: alt2.aspmx.l.google.com
+                ASN: 15169
+                Domain: https://about.google/intl/en/
+                Name: GOOGLE
+                Route: 142.250.152.0/24
+                Type: Content
+                Domain Name: alt2.aspmx.l.google.com
+                Categories:
+                        Confidence: 0.82, Name: Search Engines
+                Created Date: N/A
+                Website Responded: True
+
+
+        Website Categorization and Threat Intelligence for SSL IP and domain:
 
         SSL Certificate Information:
                 IP.............: 104.26.12.210
@@ -71,20 +259,24 @@ Starting data collection process...
                 Issuer Country.: US
                 Organization...: Cloudflare, Inc.
 
-        Checking Domain name reputation for whoisxmlapi.com
-                Domain Reputation score passed:  98.58
+        Threat Intelligence Check for SSL Domain whoisxmlapi.com
+                No IoC records found for whoisxmlapi.com
 
-        WHOIS Record
-                Creation Date:2009-03-19 21:47:17
-                Domain name is 5326 days old.
-                WHOIS Registrant:Registration Private
-                WHOIS Registrar:GoDaddy.com, LLC
-                WHOIS Contact Email:abuse@godaddy.com
+        Threat Intelligence Check for SSL IP 104.26.12.210
+                No IoC records found for 104.26.12.210
 
-        The number of WHOIS historical records for this domain is:  27
+        Website Cateforization Check for SSL domain whoisxmlapi.com
 
-        Countries reported during this interrogation: 1
-
-                US
-
-Done, Elapsed time: 59.06 seconds.
+                Processing Domain: whoisxmlapi.com
+                ASN: 13335
+                Domain: https://www.cloudflare.com
+                Name: CLOUDFLARENET
+                Route: 104.26.0.0/20
+                Type: Content
+                Domain Name: whoisxmlapi.com
+                Categories:
+                        Confidence: 1, Name: Computer and Internet Security
+                        Confidence: 0.81, Name: Business and Economy
+                        Confidence: 0.76, Name: Reference and Research
+                Created Date: 2009-03-19T21:47:17+00:00
+                Website Responded: True
