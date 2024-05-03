@@ -203,7 +203,7 @@ def run_email_results(result):
 
 def load_email(emailAddr):
 
-	api_url = 'https://emailverification.whoisxmlapi.com/api/v1'
+	api_url = 'https://emailverification.whoisxmlapi.com/api/v3'
 
 	url = api_url\
     		+ '?emailAddress=' + pathname2url(emailAddr)\
