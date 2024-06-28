@@ -12,7 +12,7 @@ The second step is to read the pickle object file, and load it as an interval tr
 
 Again, these files are provided as an example. With some creativity and resouces, you can:
 
-* add parallel pocessing during the creation and loading process to speed it up.
+* add parallel processing during the creation and loading process to speed it up.
 * once loaded, offer it as an internal API service or integrate it into your code line.
 
 We've also separated the IPv4 from the IPv6 creation since the two IP addresses are very diffent, but the code could easily be merged.
