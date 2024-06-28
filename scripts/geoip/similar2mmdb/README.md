@@ -2,7 +2,7 @@ There are three files in this repo:
 
    - build_geoIPv4_interval_tree.py
    - build_geoIPv6_interval_tree.py
-   - check_geoIPv4_interval_tree.py
+   - check_geoip_interval_tree.py
 
 These files are provided "as is", and come with no warranty or support, but are provided as an example of what you can do to build a smiliar MMDB type
 data structure to perform fast lookups.  The first step in the process is to build a 'pickle' (.pkl) file that serializes the data and writes the object
