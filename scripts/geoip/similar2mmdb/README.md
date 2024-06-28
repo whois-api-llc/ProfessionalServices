@@ -1,6 +1,7 @@
 There are three files in this repo:
 
-   - build_geoIPv4_inteval_tree.py
+   - build_geoIPv4_interval_tree.py
+   - build_geoIPv6_interval_tree.py
    - check_geoIPv4_interval_tree.py
 
 These files are provided "as is", and come with no warranty or support, but are provided as an example of what you can do to build a smiliar MMDB type
