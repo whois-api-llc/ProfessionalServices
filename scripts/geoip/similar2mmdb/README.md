@@ -14,6 +14,38 @@ Again, these files are provided as an example. With some creativity and resouces
 
 * add parallel processing during the creation and loading process to speed it up.
 * once loaded, offer it as an internal API service or integrate it into your code line.
+* use .gz compression
 
 We've also separated the IPv4 from the IPv6 creation since the two IP addresses are very diffent, but the code could easily be merged.
+
+Compression Example:
+
+import gzip
+import pickle
+
+# Saving the pickle file with gzip compression
+with gzip.open('data.pkl.gz', 'wb') as f:
+    pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+# Loading the pickle file with gzip compression
+with gzip.open('data.pkl.gz', 'rb') as f:
+    data = pickle.load(f)
+
+
+Multithreading Example:
+
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import pickle
+
+def load_part(file):
+    with open(file, 'rb') as f:
+        return pickle.load(f)
+
+files = ['part1.pkl', 'part2.pkl', 'part3.pkl']
+with ThreadPoolExecutor() as executor:
+    futures = [executor.submit(load_part, file) for file in files]
+    results = [future.result() for future in as_completed(futures)]
+
+# Combine the parts
+data = combine(results)
 
