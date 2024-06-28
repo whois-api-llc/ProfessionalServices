@@ -20,6 +20,7 @@ We've also separated the IPv4 from the IPv6 creation since the two IP addresses 
 
 Compression Example:
 
+'''
 import gzip
 import pickle
 
@@ -31,10 +32,11 @@ with gzip.open('data.pkl.gz', 'wb') as f:
 # Loading the pickle file with gzip compression
 with gzip.open('data.pkl.gz', 'rb') as f:
    data = pickle.load(f)
-
+'''
 
 Multithreading Example:
 
+'''
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import pickle
 
@@ -50,4 +52,4 @@ with ThreadPoolExecutor() as executor:
    
    # Combine the parts
 data = combine(results)
-
+'''
