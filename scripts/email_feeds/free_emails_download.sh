@@ -5,7 +5,6 @@
 # # m h  dom mon dow   command
 # 0 4 * * * /var/scripts/efeeds_download.sh
 #
-# This script
 nooutput="--quiet"
 email_logfile="efeeds_download.log"
 yesterday=$(date '+%Y-%m-%d' -d "yesterday")
