@@ -1,5 +1,5 @@
 # kyc.py by WHOISXMLAPI.COM
-# Developed by Professional.Services@whoisxmlapi.com  v2.0   Feb 2024
+# Developed by Professional.Services@whoisxmlapi.com  v2.1 Jan 2025
 # This file is provided "as-is" with no warranty or support
 # You will need to obtain a valid API key with sufficient credits from whoisxmlapi.com
 #  WHOISXMLAPI GitHub Repository can be found at https://github.com/whois-api-llc/
@@ -183,7 +183,8 @@ def run_email_results(result):
         sys.exit(1)
 
     for mx_record in result['mxRecords']:
-        mx = mx_record[:-1]
+        # mx = mx_record[:-1]
+	mx = mx_record
         if mx not in mx_domains:
                  mx_domains.append(mx)
         mx_dns_response = sdDNS.get(mx, 'A')
@@ -406,16 +407,6 @@ if __name__ == '__main__':
     # Check if the script is run without command-line arguments
     if len(sys.argv) == 1:
 
-        print("\nKYC Evaluation:")
-        print("\n\t1) E-mail Address")
-        print("\tq) Quit\n")
-
-        eval_selection = input("Enter selection: ")
-
-        # Exit if the user selects 'q'
-        if eval_selection == "q":
-            sys.exit(0)
-
         emailAddr = input("\nEnter e-mail Address: ")
 
         startwatch = timeit.default_timer()    
@@ -439,11 +430,6 @@ if __name__ == '__main__':
         print(f"\n\tCountries reported during this interrogation: {str(len(countryCounter))}\n\n\t\t", end="")
         for cnt in countryCounter:
             print(cnt, " ", end="")
-
-        if eval_selection == '2':
-            print("Phase 2 Under Construction")
-        if eval_selection == '3':
-            print("Phase 3 Under Construction")
 
         # Check Threat Intelligence data for email domain
         threat_intel_data = get_threat_intel(domainName, apiKey)
