@@ -1,6 +1,37 @@
 # Walk-History.py written by Professional.Services@whoisxmlapi.com
 # This script is provided from demostration purpposes and uses live API credits. Use at own risk.
 # Start with low values to understand the impact.
+#
+# This script queries historical WHOIS records and reverse WHOIS data from the WhoisXML API to identify email addresses associated with domain registrations and map out domains linked to those email addresses.
+#
+# Key Functionalities:
+#   Retrieve Historical WHOIS Data:
+#
+# Uses the WhoisXML API to fetch historical WHOIS records for a given domain.
+# Extracts registrant email addresses and tracks unique, duplicate, and missing email records.
+# Perform Reverse WHOIS Lookup:
+#
+# Searches for all domains associated with a given email address using the WhoisXML API.
+# Supports preview mode (fetching a count of domains) and purchase mode (retrieving full domain lists).
+# Generate Reports:
+#    Saves discovered email addresses in a CSV file.
+#    Writes a summary report listing domains, associated emails, and the number of discovered emails.
+#
+# Accepts arguments such as:
+#   --domainName: Target domain for historical lookup.
+#   --depth: Determines whether to run in preview (1) or purchase mode (2).
+#   --limit: Restricts the number of domains fetched.
+#   --history: Specifies how many WHOIS history records to retrieve.
+#
+# API Usage Tracking:
+#
+# Tracks API calls made in both preview and purchase modes.
+# Displays API credit usage based on requests.
+#
+# Example Use Case:
+# A researcher wants to analyze all past registrant email addresses linked to example.com.
+# The script retrieves these emails and performs reverse WHOIS lookups to identify additional domains registered by those emails.
+# The output is stored in a CSV file for further analysis.
 
 from urllib.request import urlopen
 import requests
