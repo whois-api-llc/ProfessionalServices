@@ -1,5 +1,12 @@
 # whoisxmlapi.com - Firstwatch domainName list to TAXII/StIX 2.1 format.
 # Version 1.0   2025-02-27
+#
+# Features:
+#   Reads domain names from a text or CSV file.
+#   Converts them into STIX 2.1 Indicator objects with domain-name observable type.
+#   Generates a TAXII 2.1 compatible STIX bundle.
+#   Outputs the JSON file in TAXII format.
+#
 # Notes:
 #   The default behavior generates a compact JSON file (not ideal for human readable format)
 #      Example: python convert_to_taxii.py firstwatch-list.csv output.json
