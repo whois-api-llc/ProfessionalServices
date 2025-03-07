@@ -1,75 +1,95 @@
-# Simple Websocket client to connect and continiously read wss: service after sending apiKey
-# Version 2 - added counters based on the verb, as well as additional output such as the registrar
-# Be sure to specify your API key
-# Requirements: pip3 install websocket-client
-# Specifications can be found at: https://domain-registration-streaming.whoisxmlapi.com/specifications/data-streaming
-# Sample provided by WHOISXMLAPI.COM, credit goes to https://pypi.org/project/websocket-client/ 
-# Professional.Services@whoisxmlapi.com
-
 #!/usr/bin/env python3
 
 import os
 import json
+import sys
+import signal
 from websocket import create_connection
 
-recCounter = 0
+# Read API key from environment variable
+API_KEY = os.getenv("API_KEY")
+if not API_KEY:
+    print("ERROR: API_KEY environment variable not set.")
+    sys.exit(1)
 
-ws = create_connection("wss://nrd-stream.whoisxmlapi.com/ultimate")
-
-# define environment variable: API_KEY and read it in
-
-apiKey = os.getenv('APIKEY')
+# WebSocket connection
+ws_url = "wss://nrd-stream.whoisxmlapi.com/ultimate"
+print(f"Connecting to {ws_url}...")
+ws = create_connection(ws_url)
 
 print("Sending API Key...")
-ws.send(apiKey)
+ws.send(API_KEY)
 print("API Key Sent")
 
-print("Receiving WHOIS data (press ctrl/c to terminate)...")
+print("Receiving WHOIS data (press Ctrl+C to terminate)...")
 
+# Initialize counters
 txCounter = 0
 recCounter = 0
 unknownVerb = 0
 domainAdded = 0
-domainUpdated =0
+domainUpdated = 0
 domainDiscovered = 0
 domainDropped = 0
 
+# Graceful shutdown
+def signal_handler(sig, frame):
+    print("\nClosing WebSocket connection...")
+    ws.close()
+    print("WebSocket closed.")
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
+
+# Read and process data continuously
 while True:
-   txCounter += 1
-   result = ws.recv()
-   # determine the length of the result
-   rLength = len(result)
-   print("%d characters received in transaction '%d'" %(rLength, txCounter))
-   recTxCounter = 0
-   # read in case of multi-line jsonl
-   for json_line  in result.splitlines():
-      recCounter += 1
-      recTxCounter += 1
-      try:
-         record = json.loads(json_line)
-         domainReason = record['reason']
-         domainName = record['domainName']
-         IANAID = record['registrarIANAID']
-         domainRegistrar = record['registrarName']
+    try:
+        txCounter += 1
+        result = ws.recv()
+        rLength = len(result)
+        print(f"{rLength} characters received in transaction '{txCounter}'")
 
-         if domainReason == "added":
-            domainAdded += 1
-         elif domainReason == "discovered":
-            domainDiscovered += 1
-         elif domainReason == "updated":
-            domainUpdated += 1
-         elif domainReason == "dropped":
-            domainDropped += 1
-         else:
-            unknownVerb += 1
+        recTxCounter = 0
 
-         print("\n[Record#:%d] reason:%-12s registrarIANAID:%-5d domainName:%s  (registrarName:%s)\n"%(recCounter, reason, registrarIANAID, domainName, registrarName))
+        for json_line in result.splitlines():
+            recCounter += 1
+            recTxCounter += 1
+            try:
+                record = json.loads(json_line)
+                domainReason = record.get("reason", "unknown")
+                domainName = record.get("domainName", "N/A")
+                IANAID = record.get("registrarIANAID", "N/A")
+                domainRegistrar = record.get("registrarName", "N/A")
 
-      except Exception as e:
-         print("ERROR: Record no. %d FAILED TO DECODE."%(recCounter))
-         print("ERROR: %s"%str(e))
-   print("\n+++End of transaction %d, added: %d, discovered: %d, updated: %d, dropped: %d"%(txCounter, domainAdded, domainDiscovered, domainUpdated, domainDropped))
-   print("%d records received in transaction %d, %d in total: "%(recTxCounter, txCounter, recCounter))
-# close the websocket
+                if domainReason == "added":
+                    domainAdded += 1
+                elif domainReason == "discovered":
+                    domainDiscovered += 1
+                elif domainReason == "updated":
+                    domainUpdated += 1
+                elif domainReason == "dropped":
+                    domainDropped += 1
+                else:
+                    unknownVerb += 1
+
+                print(f"\n[Record#:{recCounter}] reason:{domainReason:<12} "
+                      f"registrarIANAID:{IANAID:<5} domainName:{domainName}  "
+                      f"(registrarName:{domainRegistrar})\n")
+
+            except json.JSONDecodeError as e:
+                print(f"ERROR: Record no. {recCounter} FAILED TO DECODE.")
+                print(f"ERROR: {str(e)}")
+
+        print(f"\n+++ End of transaction {txCounter}, added: {domainAdded}, "
+              f"discovered: {domainDiscovered}, updated: {domainUpdated}, "
+              f"dropped: {domainDropped}")
+        print(f"{recTxCounter} records received in transaction {txCounter}, "
+              f"{recCounter} in total.")
+
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        break
+
+# Close the WebSocket
 ws.close()
-print("Websocket closed.")
+print("WebSocket closed.")
