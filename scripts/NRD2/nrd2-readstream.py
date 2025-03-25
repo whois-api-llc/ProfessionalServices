@@ -3,10 +3,10 @@
 import json
 import sys
 import signal
-from websocket import create_connection
+from websocket import create_connection, WebSocketTimeoutException
 from datetime import datetime
 
-API_KEY = "<YOUR_API_KEY>"  
+API_KEY = "your_api_key_here"  # Replace with your actual API key
 BUFFER_SIZE = 100
 
 if len(sys.argv) != 2:
@@ -26,6 +26,7 @@ except IOError as e:
 ws_url = "wss://nrd-stream.whoisxmlapi.com/ultimate"
 print(f"Connecting to {ws_url}...")
 ws = create_connection(ws_url)
+ws.settimeout(1.0)  # Set a 1-second timeout for recv()
 ws.send(API_KEY)
 print("API Key Sent")
 print("Receiving WHOIS data (press Ctrl+C to terminate)...")
@@ -39,19 +40,27 @@ domainDiscovered = 0
 domainDropped = 0
 write_buffer = []
 
+# Flag to indicate shutdown
+shutdown_flag = False
+
 def signal_handler(sig, frame):
-    if write_buffer:
-        output_file.writelines(write_buffer)
-    print("\nClosing WebSocket connection...")
-    ws.close()
-    print("WebSocket closed.")
-    output_file.close()
-    print(f"Output file {OUTPUT_FILE} closed.")
-    sys.exit(0)
+    global shutdown_flag
+    print("\nCtrl+C detected, initiating shutdown...")
+    shutdown_flag = True  # Set flag to exit main loop
 
 signal.signal(signal.SIGINT, signal_handler)
 
-while True:
+def cleanup():
+    """Clean up resources before exit."""
+    if write_buffer:
+        output_file.writelines(write_buffer)
+        output_file.flush()
+    ws.close()
+    output_file.close()
+    print("WebSocket closed.")
+    print(f"Output file {OUTPUT_FILE} closed.")
+
+while not shutdown_flag:
     try:
         txCounter += 1
         result = ws.recv()
@@ -107,15 +116,19 @@ while True:
         print(f"{recTxCounter} records received in transaction {txCounter}, "
               f"{recCounter} in total.")
 
+    except WebSocketTimeoutException:
+        # Timeout occurred, check for shutdown flag
+        if shutdown_flag:
+            break
+        continue  # Normal timeout, keep looping
     except ConnectionError:
         print("Connection error occurred.")
         break
-    except TimeoutError:
-        print("Receive timeout.")
-        continue
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        break
 
-ws.close()
-if write_buffer:
-    output_file.writelines(write_buffer)
-output_file.close()
-print("WebSocket and output file closed.")
+# Perform cleanup on exit
+cleanup()
+print("Script terminated cleanly.")
+sys.exit(0)
