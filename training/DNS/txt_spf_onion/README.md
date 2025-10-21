@@ -225,12 +225,7 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 - Authors of the original paper, "The SPF Onion - Enter the World of SPF Chaos"
 - [Original Document](https://main.whoisxmlapi.com/blog/the-spf-onion-enter-the-world-of-spf-chaos)
 - ed.gibbs@whoisxmlpapi.com
-- jeff@vogelogic.com, Jeff Vogelpohl
-
-## 📧 Contact
-
-- Email: ed.gibbs@whoisxmlapi.com
-- Email: alex.ronquillo@whoisxmlapi.com
+- Jeff Vogelpohl [LinkIn](https://www.linkedin.com/in/jeffvogelpohl/)
 
 ## 🔗 Additional Resources
 
