@@ -1,3 +1,0 @@
-This file contains a small sample of DNS TXT records compared to over the 50 million txt records.
-
-Proceed at your own risk!  It's a lot of data to analyze!
