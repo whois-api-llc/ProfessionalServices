@@ -121,27 +121,171 @@ Processing time: 8.4 minutes
 ## 🎯 Example Session
 
 ```bash
-$ python -i spf_labs_working.py
+$ python -i spf_onion_labs.py
 
->>> # Test it works
->>> quick_test('txt_database.csv', 5)
+======================================================================
+SPF ONION LABS - Interactive Session
+======================================================================
 
->>> # Run Phase 1 (fast scan)
->>> stats = identify_candidates('txt_database.csv', 'candidates.csv')
-Scanning: 2500000 records [03:24, 12245 records/s]
-Found 1,247 candidates
+Functions available:
+  quick_test('your_file.csv')              - Test file reading
+  identify_candidates(...)                  - Phase 1: Fast scan
+  find_violations(...)                      - Phase 2: Deep analysis
+  load_stats_from_candidates('file.csv')   - Reload stats if needed
+  run_full_analysis('your_file.csv')        - Run everything
 
->>> # Run Phase 2 (DNS lookups)
->>> violations = find_violations('candidates.csv')
-Analyzing: 1247 domains [08:23, 2.48 domains/s]
-Found 89 violations
+Example:
+  >>> quick_test('txt_database.csv')
+  >>> stats = identify_candidates('txt_database.csv', 'candidates.csv')
+  >>> violations = find_violations('candidates.csv')
+  >>> generate_executive_report(violations, stats)
 
->>> # Generate reports
+If you lost 'stats' variable:
+  >>> stats = load_stats_from_candidates('candidates.csv')
+  >>> generate_executive_report(violations, stats)
+
+Or just omit stats:
+  >>> generate_executive_report(violations)
+
+>>> quick_test('100K.csv')
+
+Quick Test: Reading first 10 SPF records...
+
+1. 0--0--000-575urepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+2. 0--0--00000000-0000-0a09-0000-00000005b5c6urepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+3. 0--0--00000000-mailurepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+4. 0--0--000000000000.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+5. 0--0--00000000000000000000comstatic-lexarecordsurepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+6. 0--0--000000000000urepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+7. 0--0--0000000001pk1013789329107urepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+8. 0--0--0000000001urepipeline.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+9. 0--0--000000000553comstatic.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+10. 0--0--00000000korea.sendsafely.com
+   SPF: v=spf1 -all...
+   Mechanisms: 0 total, 0 includes
+
+✓ Successfully read 10 SPF records!
+
+
+>>> stats = identify_candidates('100K.csv', 'candidates-100K.csv')
+
+======================================================================
+PHASE 1: FAST SCAN - Identifying Candidates
+======================================================================
+
+Scanning dataset for interesting SPF records...
+(This may take 3-5 minutes for millions of DNS TXT records)
+
+Scanning: 55206 SPF records [00:00, 86769.40 SPF records/s]
+>>>
+
+
+>>> generate_phase1_report(stats)
+
+======================================================================
+PHASE 1: SCAN RESULTS
+======================================================================
+
+Records processed: 55,206
+SPF records found: 55,206 (100.0%)
+Candidates identified: 5,571 (10.1% of SPF)
+Processing time: 0.7 seconds (0.0 minutes)
+Processing rate: 83,596 records/second
+
+Top reasons for flagging:
+  suspicious_domain        : 5,411 ( 97.1%)
+  abused_tld_xyz           : 3,231 ( 58.0%)
+  deep_subdomain           : 1,652 ( 29.7%)
+  abused_tld_cf            :   361 (  6.5%)
+  many_mechanisms          :   153 (  2.7%)
+  abused_tld_ga            :    85 (  1.5%)
+  abused_tld_top           :    70 (  1.3%)
+  many_includes            :     9 (  0.2%)
+  abused_tld_pw            :     8 (  0.1%)
+  abused_tld_ml            :     7 (  0.1%)
+
+======================================================================
+
+>>> violations = find_violations('candidates-100K.csv')
+
+======================================================================
+PHASE 2: DEEP ANALYSIS - DNS Lookups on Candidates
+======================================================================
+
+Analyzing 5571 candidates...
+(This may take 10-15 minutes with DNS lookups)
+
+Analyzing: 100%|█████████████████████████████████████████| 5571/5571 [00:10<00:00, 520.65 domains/s]
+
+DNS Cache Performance:
+  Unique domains queried: 144
+  Cache hits: 3,715
+  Cache misses: 144
+  Hit rate: 96.3%
+
+======================================================================
+VIOLATIONS FOUND: 1 domains exceed 10 DNS lookups
+======================================================================
+
+
+>>> print(f"Found {len(violations)} violations!")
+Found 1 violations!
+
+
 >>> generate_executive_report(violations, stats)
->>> generate_technical_report(violations)
-✓ Technical report saved to: technical_report.txt
 
->>> exit()
+======================================================================
+EXECUTIVE SUMMARY: SPF ONION ANALYSIS
+======================================================================
+Analysis Date: 2025-10-21 13:33
+
+Dataset Overview:
+  Records Analyzed: 55,206
+  SPF Records: 55,206
+  Candidates Investigated: 5,571
+  RFC Violations Found: 1
+
+Severity Breakdown:
+  Critical (>15 lookups): 0
+  High (13-15 lookups): 1
+  Medium (11-12 lookups): 0
+
+Top 10 Worst Offenders:
+   1. 0605.wkre.com                                      - 13 lookups
+
+======================================================================
+
+
+>>> generate_technical_report(violations, 'technical_report-100K.txt')
+
+✓ Technical report saved to: technical_report-100K.txt
 ```
 
 ---
