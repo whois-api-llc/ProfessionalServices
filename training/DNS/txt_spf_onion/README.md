@@ -218,15 +218,14 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 - The cybersecurity community
 - Provided "AS-IS" by:  WHOIS API, Inc.   www.whoisxmlapi.com
 - Product: DNS Database
-- 
-Developers: 
+- Developers: 
          ed.gibbs@whoisxmlapi.com
          alex.ronquillo@whoisxmlapi.com, VP of Products
   
-Authors of the original paper, "The SPF Onion - Enter the World of SPF Chaos"
-         [Original Document](https://main.whoisxmlapi.com/blog/the-spf-onion-enter-the-world-of-spf-chaos)
-         ed.gibbs@whoisxmlpapi.com
-         jeff@vogelogic.com, Jeff Vogelpohl
+- Authors of the original paper, "The SPF Onion - Enter the World of SPF Chaos"
+- [Original Document](https://main.whoisxmlapi.com/blog/the-spf-onion-enter-the-world-of-spf-chaos)
+- ed.gibbs@whoisxmlpapi.com
+- jeff@vogelogic.com, Jeff Vogelpohl
 
 ## 📧 Contact
 
