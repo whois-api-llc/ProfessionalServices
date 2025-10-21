@@ -1,0 +1,13 @@
+# SPF Onion Detection Labs - Python Dependencies
+
+# Core dependencies
+dnspython>=2.0.0     # DNS queries and resolution
+tqdm>=4.65.0         # Progress bars (optional but recommended)
+
+# Python standard libraries (included with Python, listed for reference)
+# csv - CSV file processing
+# re - Regular expressions
+# time - Performance timing
+# typing - Type hints
+# collections - Counter, defaultdict
+# datetime - Timestamps
