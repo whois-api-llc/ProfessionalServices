@@ -219,8 +219,8 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file for
 
 ## 📧 Contact
 
-- Issues: [GitHub Issues](https://github.com/yourusername/spf-onion-labs/issues)
 - Email: ed.gibbs@whoisxmlapi.com
+- Email: alex.ronquillo@whoisxmlapi.com
 
 ## 🔗 Additional Resources
 
