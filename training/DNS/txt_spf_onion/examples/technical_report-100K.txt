@@ -1,0 +1,23 @@
+======================================================================
+SPF ONION DETECTION - TECHNICAL REPORT
+======================================================================
+
+Generated: 2025-10-21 13:34:54
+
+VIOLATIONS FOUND: 1
+
+
+----------------------------------------------------------------------
+VIOLATION #1
+----------------------------------------------------------------------
+Domain: 0605.wkre.com
+DNS Lookups: 13 (RFC 7208 limit: 10)
+SPF Record: v=spf1 ip4:207.106.18.52/28 ip4:52.132.138.150 include:spf.protection.outlook.com a:dispatch-us.ppe-hosted.com include:_spf.lwolf.com include:_hosting_spf.deltagroup.com include:move.com include:topma
+
+Warnings:
+  - Circular reference: sendgrid.net
+
+Recommendations:
+  - Flatten SPF record to reduce includes
+  - Use subdomains for different mail services
+  - Consolidate third-party services
