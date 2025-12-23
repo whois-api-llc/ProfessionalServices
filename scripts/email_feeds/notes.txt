@@ -1,0 +1,5 @@
+Useful commands:
+
+This script will count the number of rows in a collection of files, specified by "filename_pattern*" and calculate the min, max, and average.
+
+for f in filename_pattern*; do wc -l "$f"; done | awk '{sum+=$1; count++; if(NR==1 || $1>max) max=$1; if(NR==1 || $1<min) min=$1} END {printf "Highest: %d\nLowest: %d\nAverage: %.2f\n", max, min, sum/count}'
