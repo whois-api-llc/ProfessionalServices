@@ -1,7 +1,7 @@
 Starting KYC verification for: support@whoisxmlapi.com
 --------------------------------------------------
 
-[1/7] Verifying email address...
+[1/6] Verifying email address...
       ✓ Format: passed
       ✓ SMTP: passed
       ✓ DNS: passed
@@ -10,46 +10,43 @@ Starting KYC verification for: support@whoisxmlapi.com
       ✓ Email verification passed
       Location: The Greenhouse, California, US
 
-[2/7] Collecting DNS records...
+[2/6] Collecting DNS records...
       Found 2 NS records, 1 MX records
       NS: carl.ns.cloudflare.com -> 172.64.33.106
            Location: Austin, Indiana, US
-           ASN: 0 (Unknown)
-      NS: carl.ns.cloudflare.com -> 108.162.193.106
-           Location: Austin, Indiana, US
-           ASN: 0 (Unknown)
+           ASN: 13335 (CLOUDFLARENET)
       NS: carl.ns.cloudflare.com -> 173.245.59.106
            Location: Austin, Indiana, US
-           ASN: 0 (Unknown)
-      NS: elle.ns.cloudflare.com -> 173.245.58.110
-           Location: South Beach, California, US
-           ASN: 0 (Unknown)
-      NS: elle.ns.cloudflare.com -> 108.162.192.110
-           Location: South Beach, California, US
-           ASN: 0 (Unknown)
+           ASN: 13335 (CLOUDFLARENET)
+      NS: carl.ns.cloudflare.com -> 108.162.193.106
+           Location: Austin, Indiana, US
+           ASN: 13335 (CLOUDFLARENET)
       NS: elle.ns.cloudflare.com -> 172.64.32.110
            Location: South Beach, California, US
-           ASN: 0 (Unknown)
-      MX: aspmx.l.google.com -> 192.178.164.26
+           ASN: 13335 (CLOUDFLARENET)
+      NS: elle.ns.cloudflare.com -> 108.162.192.110
+           Location: South Beach, California, US
+           ASN: 13335 (CLOUDFLARENET)
+      NS: elle.ns.cloudflare.com -> 173.245.58.110
+           Location: South Beach, California, US
+           ASN: 13335 (CLOUDFLARENET)
+      MX: aspmx.l.google.com -> 108.177.98.26
            Location: The Greenhouse, California, US
-           ASN: 0 (Unknown)
+           ASN: 15169 (GOOGLE)
 
-[3/7] Checking domain reputation and WHOIS...
+[3/6] Checking domain reputation and WHOIS...
       ✓ Reputation score: 100.0
       ✓ Domain is 6146 days old
-      Historical WHOIS records: 47
+      Historical WHOIS records: 48
 
-[4/7] Checking threat intelligence...
+[4/6] Checking threat intelligence...
       ✓ No threat intelligence records found
 
-[5/7] Getting website categorization...
-      Categories: Technology & Computing, Information and Network Security, Email
-
-[6/7] Checking SSL certificate...
+[5/6] Checking SSL certificate...
       ✓ Valid from 2025-10-11 18:21:28 UTC to 2026-01-09 18:21:27 UTC
       Issuer: Let's Encrypt (US)
 
-[7/7] Generating summary...
+[6/6] Generating summary...
       Countries observed: US
 
 ======================================================================
@@ -58,7 +55,7 @@ Starting KYC verification for: support@whoisxmlapi.com
 
 Email: support@whoisxmlapi.com
 Domain: whoisxmlapi.com
-Processing time: 41.89 seconds
+Processing time: 22.78 seconds
 
 --- Email Verification ---
 Status: PASSED
@@ -69,33 +66,33 @@ Reputation Score: 100.0 (OK)
 Domain Age: 6146 days
 Registrant: Registration Private
 Registrar: GoDaddy.com, LLC
-WHOIS History Records: 47
+WHOIS History Records: 48
 
 --- NS Records ---
   carl.ns.cloudflare.com -> 172.64.33.106
     Location: US
-    ASN: 0 (Unknown)
-  carl.ns.cloudflare.com -> 108.162.193.106
-    Location: US
-    ASN: 0 (Unknown)
+    ASN: 13335 (CLOUDFLARENET)
   carl.ns.cloudflare.com -> 173.245.59.106
     Location: US
-    ASN: 0 (Unknown)
-  elle.ns.cloudflare.com -> 173.245.58.110
+    ASN: 13335 (CLOUDFLARENET)
+  carl.ns.cloudflare.com -> 108.162.193.106
     Location: US
-    ASN: 0 (Unknown)
-  elle.ns.cloudflare.com -> 108.162.192.110
-    Location: US
-    ASN: 0 (Unknown)
+    ASN: 13335 (CLOUDFLARENET)
   elle.ns.cloudflare.com -> 172.64.32.110
     Location: US
-    ASN: 0 (Unknown)
+    ASN: 13335 (CLOUDFLARENET)
+  elle.ns.cloudflare.com -> 108.162.192.110
+    Location: US
+    ASN: 13335 (CLOUDFLARENET)
+  elle.ns.cloudflare.com -> 173.245.58.110
+    Location: US
+    ASN: 13335 (CLOUDFLARENET)
 
 --- MX Records ---
-  aspmx.l.google.com -> 192.178.164.26
+  aspmx.l.google.com -> 108.177.98.26
     Domains on server: 300
     Location: US
-    ASN: 0 (Unknown)
+    ASN: 15169 (GOOGLE)
 
 --- Threat Intelligence ---
   No threats detected
@@ -105,8 +102,7 @@ WHOIS History Records: 47
   Valid: 2025-10-11 18:21:28 UTC to 2026-01-09 18:21:27 UTC
   Subject: whoisxmlapi.com
   Issuer: Let's Encrypt (US)
-  ASN: 0 (Unknown)
+  ASN: 13335 (CLOUDFLARENET)
 
 --- Countries Observed ---
   US(1)
-
