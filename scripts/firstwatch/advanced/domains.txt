@@ -1,0 +1,6 @@
+microsoft-365authenticator.app
+microsoft-auth.online
+microsoft-coffee.com
+microsoft-deutschland.com
+microsoft-365store-in-seattle.com
+

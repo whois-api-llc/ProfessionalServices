@@ -1,0 +1,34 @@
+# FirstWatch API Configuration File
+# Copy to firstwatch.conf and update [credentials].
+
+[credentials]
+username = your_username_here
+password = your_password_here
+
+[api]
+base_url = https://chaos.yatic.io/api/firstwatch
+delay = 1.0
+timeout = 30
+max_retries = 2
+check_quota_before_run = true
+stop_if_quota_insufficient = false
+
+[output]
+# Default output format if --output-format is not provided
+# Options: csv, json  (json is JSONL), stix (STIX 2.1 bundle JSON)
+output_format = csv
+
+[stix]
+# TLP marking for STIX bundle objects: clear|green|amber|red
+tlp = clear
+
+# Classification for indicators:
+# - If it matches a known STIX indicator_types value (e.g., malicious-activity), it will be used as indicator_types.
+# - Otherwise it will be stored as a label and indicator_types will default to ["unknown"].
+classification = malicious-activity
+
+# Producer identity name used in created_by_ref
+identity_name = FirstWatch
+
+# Optional extra labels (comma-separated)
+labels = firstwatch

@@ -1,0 +1,308 @@
+{
+  "type": "bundle",
+  "id": "bundle--9bb0dbb2-719d-4bae-9003-16b626abf16a",
+  "spec_version": "2.1",
+  "objects": [
+    {
+      "type": "identity",
+      "spec_version": "2.1",
+      "id": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "created": "2026-01-25T13:54:20Z",
+      "modified": "2026-01-25T13:54:20Z",
+      "name": "FirstWatch",
+      "identity_class": "organization"
+    },
+    {
+      "type": "marking-definition",
+      "spec_version": "2.1",
+      "id": "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f",
+      "created": "2026-01-25T13:54:20Z",
+      "definition_type": "tlp",
+      "definition": {
+        "tlp": "amber"
+      }
+    },
+    {
+      "type": "domain-name",
+      "spec_version": "2.1",
+      "id": "domain-name--c5f06930-879e-4c14-90ac-0358f06ffc25",
+      "value": "microsoft-365authenticator.app",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--9be85225-69df-4ce7-aa86-76cff59bba0f",
+      "created": "2026-01-25T13:54:20Z",
+      "modified": "2026-01-25T13:54:20Z",
+      "name": "FirstWatch domain indicator: microsoft-365authenticator.app",
+      "description": "Indicator generated from FirstWatch feed results.",
+      "pattern_type": "stix",
+      "pattern": "[domain-name:value = 'microsoft-365authenticator.app']",
+      "valid_from": "2026-01-25T13:54:20Z",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "labels": [
+        "firstwatch-hit",
+        "mode:exact",
+        "firstwatch"
+      ],
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ],
+      "x_firstwatch": {
+        "record_id": "21a192a8-058b-4358-ab88-cc0445488ad6",
+        "domain_name": "microsoft-365authenticator.app",
+        "reason": "added",
+        "contact_email": "registrar-abuse@cloudflare.com",
+        "status": "addPeriod clientTransferProhibited",
+        "registrar_name": "CloudFlare, Inc.",
+        "registrar_iana_id": "1910",
+        "whois_server": "whois.cloudflare.com",
+        "name_servers": [
+          "rex.ns.cloudflare.com",
+          "veda.ns.cloudflare.com"
+        ],
+        "created_date": "2023-11-16 23:37:07 UTC",
+        "updated_date": "2023-11-16 23:37:09 UTC",
+        "expires_date": "2024-11-16 23:37:07 UTC",
+        "audit_updated_date": "2023-11-16 23:48:55 UTC",
+        "contacts": [
+          {
+            "type": "Registrant",
+            "name": "REDACTED FOR PRIVACY",
+            "organization": "DATA REDACTED",
+            "address": "REDACTED FOR PRIVACY, REDACTED FOR PRIVACY, AL, REDACTED FOR PRIVACY, UNITED STATES"
+          },
+          {
+            "type": "Administrative, Technical, Billing",
+            "name": "REDACTED FOR PRIVACY",
+            "organization": "REDACTED FOR PRIVACY",
+            "address": "REDACTED FOR PRIVACY, REDACTED FOR PRIVACY, REDACTED FOR PRIVACY, REDACTED FOR PRIVACY, REDACTED FOR PRIVACY"
+          }
+        ]
+      }
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--6f5fedbe-f99d-4322-a7f4-1f30f25ece98",
+      "created": "2026-01-25T13:54:20Z",
+      "modified": "2026-01-25T13:54:20Z",
+      "relationship_type": "based-on",
+      "source_ref": "indicator--9be85225-69df-4ce7-aa86-76cff59bba0f",
+      "target_ref": "domain-name--c5f06930-879e-4c14-90ac-0358f06ffc25",
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "domain-name",
+      "spec_version": "2.1",
+      "id": "domain-name--3a1ecd8d-ed81-462f-8f9f-12792be45a81",
+      "value": "microsoft-auth.online",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--adf778ed-7861-4054-8581-7180d8bb6610",
+      "created": "2026-01-25T13:54:21Z",
+      "modified": "2026-01-25T13:54:21Z",
+      "name": "FirstWatch domain indicator: microsoft-auth.online",
+      "description": "Indicator generated from FirstWatch feed results.",
+      "pattern_type": "stix",
+      "pattern": "[domain-name:value = 'microsoft-auth.online']",
+      "valid_from": "2026-01-25T13:54:21Z",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "labels": [
+        "firstwatch-hit",
+        "mode:exact",
+        "firstwatch"
+      ],
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ],
+      "x_firstwatch": {
+        "record_id": "5d0082ea-3f00-411b-99c9-1fb1e529c6b3",
+        "domain_name": "microsoft-auth.online",
+        "reason": "added",
+        "contact_email": "abuse@namesilo.com",
+        "status": "serverTransferProhibited clientTransferProhibited addPeriod",
+        "registrar_name": "NameSilo, LLC",
+        "registrar_iana_id": "1479",
+        "whois_server": "whois.namesilo.com",
+        "name_servers": [
+          "NS2.DNSOWL.COM",
+          "NS1.DNSOWL.COM",
+          "NS3.DNSOWL.COM"
+        ],
+        "created_date": "2023-11-04 19:38:54 UTC",
+        "updated_date": "2023-11-04 19:40:28 UTC",
+        "expires_date": "2024-11-04 23:59:59 UTC",
+        "audit_updated_date": "2023-11-05 03:47:40 UTC"
+      }
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--3fc7d43c-c4e8-49b3-a2f0-906b6672a43a",
+      "created": "2026-01-25T13:54:21Z",
+      "modified": "2026-01-25T13:54:21Z",
+      "relationship_type": "based-on",
+      "source_ref": "indicator--adf778ed-7861-4054-8581-7180d8bb6610",
+      "target_ref": "domain-name--3a1ecd8d-ed81-462f-8f9f-12792be45a81",
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "domain-name",
+      "spec_version": "2.1",
+      "id": "domain-name--34397eee-a20c-4adf-9739-09305f07a327",
+      "value": "microsoft-coffee.com",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--a8f83fa9-d1d3-437c-b638-ee5a6915b47e",
+      "created": "2026-01-25T13:54:22Z",
+      "modified": "2026-01-25T13:54:22Z",
+      "name": "FirstWatch domain indicator: microsoft-coffee.com",
+      "description": "Indicator generated from FirstWatch feed results.",
+      "pattern_type": "stix",
+      "pattern": "[domain-name:value = 'microsoft-coffee.com']",
+      "valid_from": "2026-01-25T13:54:22Z",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "labels": [
+        "firstwatch-hit",
+        "mode:exact",
+        "firstwatch"
+      ],
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ],
+      "x_firstwatch": {
+        "record_id": "6f51d720-73b1-495f-9c69-8ed2ba235a3d",
+        "domain_name": "microsoft-coffee.com",
+        "reason": "added",
+        "contact_email": "abuse-complaints@squarespace.com",
+        "status": "clientTransferProhibited clientDeleteProhibited",
+        "registrar_name": "Squarespace Domains LLC",
+        "registrar_iana_id": "3827",
+        "whois_server": "whois.squarespace.domains",
+        "name_servers": [
+          "ns2.digitalocean.com",
+          "ns1.digitalocean.com"
+        ],
+        "created_date": "2024-03-27 14:31:20 UTC",
+        "updated_date": "2024-03-27 16:44:57 UTC",
+        "expires_date": "2025-03-27 14:31:20 UTC",
+        "audit_updated_date": "2024-03-27 17:31:32 UTC",
+        "contacts": [
+          {
+            "type": "Registrant, Administrative, Technical",
+            "name": "REDACTED FOR PRIVACY",
+            "address": "REDACTED FOR PRIVACY, REDACTED FOR PRIVACY, PA, REDACTED FOR PRIVACY, UNITED STATES"
+          }
+        ]
+      }
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--b55a34e2-4e09-4c3f-b930-de6973579c6f",
+      "created": "2026-01-25T13:54:22Z",
+      "modified": "2026-01-25T13:54:22Z",
+      "relationship_type": "based-on",
+      "source_ref": "indicator--a8f83fa9-d1d3-437c-b638-ee5a6915b47e",
+      "target_ref": "domain-name--34397eee-a20c-4adf-9739-09305f07a327",
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "domain-name",
+      "spec_version": "2.1",
+      "id": "domain-name--4a4ff60a-2898-46a9-9f25-915c169ec539",
+      "value": "microsoft-deutschland.com",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    },
+    {
+      "type": "indicator",
+      "spec_version": "2.1",
+      "id": "indicator--f76240db-8143-4490-8773-5dc6febad447",
+      "created": "2026-01-25T13:54:24Z",
+      "modified": "2026-01-25T13:54:24Z",
+      "name": "FirstWatch domain indicator: microsoft-deutschland.com",
+      "description": "Indicator generated from FirstWatch feed results.",
+      "pattern_type": "stix",
+      "pattern": "[domain-name:value = 'microsoft-deutschland.com']",
+      "valid_from": "2026-01-25T13:54:24Z",
+      "indicator_types": [
+        "malicious-activity"
+      ],
+      "labels": [
+        "firstwatch-hit",
+        "mode:exact",
+        "firstwatch"
+      ],
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ],
+      "x_firstwatch": {
+        "record_id": "466f581d-1961-46c0-bb60-acb5896730ed",
+        "domain_name": "microsoft-deutschland.com",
+        "reason": "added",
+        "contact_email": "abuse@domainbox.com",
+        "status": "ok",
+        "registrar_name": "MESH DIGITAL LIMITED",
+        "registrar_iana_id": "1390",
+        "whois_server": "whois.meshdigital.com",
+        "name_servers": [
+          "NS37.DOMAINCONTROL.COM",
+          "NS38.DOMAINCONTROL.COM"
+        ],
+        "created_date": "2024-04-16 07:33:06 UTC",
+        "updated_date": "2024-04-16 07:33:06 UTC",
+        "expires_date": "2025-04-16 07:33:06 UTC",
+        "audit_updated_date": "2024-04-17 12:36:56 UTC"
+      }
+    },
+    {
+      "type": "relationship",
+      "spec_version": "2.1",
+      "id": "relationship--249ec743-0df9-4b5b-b417-aa944ae3536f",
+      "created": "2026-01-25T13:54:24Z",
+      "modified": "2026-01-25T13:54:24Z",
+      "relationship_type": "based-on",
+      "source_ref": "indicator--f76240db-8143-4490-8773-5dc6febad447",
+      "target_ref": "domain-name--4a4ff60a-2898-46a9-9f25-915c169ec539",
+      "created_by_ref": "identity--1cb211f4-fa5e-4286-8ad6-69d72494a55b",
+      "object_marking_refs": [
+        "marking-definition--a3f94731-37db-4c72-a04d-487bbe68cf5f"
+      ]
+    }
+  ]
+}
