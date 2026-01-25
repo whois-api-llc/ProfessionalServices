@@ -8,17 +8,15 @@
 ## 🔍 Overview
 
 
-Overview
-
 FirstWatch is a domain registration monitoring and WHOIS intelligence solution that provides early visibility into newly registered and potentially abusive domains.
 Many cyber threats—including phishing, malware delivery, fraud, and brand impersonation—rely on domains registered shortly before use. Traditional reputation-based systems often identify these domains only after abuse has already occurred.
 FirstWatch enables organizations to identify, investigate, and operationalize intelligence on suspicious domains at the earliest stages of their lifecycle.
 
-** Why Use FirstWatch? **
+## ✨ Why Use FirstWatch?
 
    FirstWatch helps organizations move upstream in the threat lifecycle by focusing on domain creation and registration behavior, rather than waiting for domains to accumulate reputation.
 
-Organizations use FirstWatch to:
+   Organizations use FirstWatch to:
 
    - Monitor newly registered and high-risk domains
    - Identify brand impersonation and typo-squatting activity
@@ -26,7 +24,7 @@ Organizations use FirstWatch to:
    - Enrich investigations with WHOIS, registrar, and nameserver context
    - Integrate early indicators into existing security and intelligence workflows
 
-** What the FirstWatch Automation Script Provides **
+## 🤖 What the Automation Script Provides
 
    The FirstWatch API delivers domain intelligence at scale. This automation script operationalizes that data for security, intelligence, and research use cases.
 
