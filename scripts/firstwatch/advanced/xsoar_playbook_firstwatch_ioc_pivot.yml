@@ -1,0 +1,108 @@
+# Cortex XSOAR Playbook (Example)
+# File: xsoar_playbook_firstwatch_ioc_pivot.yml
+# Purpose: From a seed domain IOC, query FirstWatch fuzzy search, cluster results, open investigation incident.
+
+id: FirstWatch - IOC Pivot & Infrastructure Expansion (Reference)
+version: -1
+name: FirstWatch - IOC Pivot & Infrastructure Expansion (Reference)
+description: >
+  Reference playbook that accepts a seed domain, calls FirstWatch fuzzy search to find related domains,
+  enriches results, clusters by registrar/nameserver, and creates an investigation summary.
+starttaskid: "0"
+tasks:
+  "0":
+    id: "0"
+    taskid: "00000000-0000-0000-0000-000000000000"
+    type: start
+    task:
+      id: "00000000-0000-0000-0000-000000000000"
+      version: -1
+      name: Start
+    nexttasks:
+      '#none#':
+        - "10"
+
+  "10":
+    id: "10"
+    taskid: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+    type: regular
+    task:
+      id: "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"
+      version: -1
+      name: Get Seed Domain
+      description: Read seed domain from incident field.
+      script: Builtin|||Set
+    scriptarguments:
+      key:
+        simple: FirstWatch.SeedDomain
+      value:
+        simple: ${incident.seed_domain}
+    nexttasks:
+      '#none#':
+        - "20"
+
+  "20":
+    id: "20"
+    taskid: "cccccccc-cccc-cccc-cccc-cccccccccccc"
+    type: regular
+    task:
+      id: "cccccccc-cccc-cccc-cccc-cccccccccccc"
+      version: -1
+      name: FirstWatch Fuzzy Search (Integration Placeholder)
+      description: Replace with your FirstWatch integration command or generic HTTP request to FirstWatch API.
+      script: '|||firstwatch-fuzzy-search'
+    scriptarguments:
+      query:
+        simple: ${FirstWatch.SeedDomain}
+      threshold:
+        simple: "0.85"
+    nexttasks:
+      '#none#':
+        - "30"
+
+  "30":
+    id: "30"
+    taskid: "dddddddd-dddd-dddd-dddd-dddddddddddd"
+    type: regular
+    task:
+      id: "dddddddd-dddd-dddd-dddd-dddddddddddd"
+      version: -1
+      name: Cluster Results (Registrar / Nameserver)
+      description: Cluster related domains (replace with your clustering script or transformer).
+      script: '|||cluster-domains'
+    scriptarguments:
+      domains:
+        simple: ${FirstWatch.FuzzyResults.domains}
+      registrar:
+        simple: ${FirstWatch.FuzzyResults.registrar}
+      nameservers:
+        simple: ${FirstWatch.FuzzyResults.nameservers}
+    nexttasks:
+      '#none#':
+        - "40"
+
+  "40":
+    id: "40"
+    taskid: "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"
+    type: regular
+    task:
+      id: "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"
+      version: -1
+      name: Create Investigation Summary
+      description: Write summary back to incident / case notes.
+      script: Builtin|||SetIncident
+    scriptarguments:
+      details:
+        simple: ${cluster-domains.summary}
+    nexttasks:
+      '#none#':
+        - "50"
+
+  "50":
+    id: "50"
+    taskid: "ffffffff-ffff-ffff-ffff-ffffffffffff"
+    type: title
+    task:
+      id: "ffffffff-ffff-ffff-ffff-ffffffffffff"
+      version: -1
+      name: Done
