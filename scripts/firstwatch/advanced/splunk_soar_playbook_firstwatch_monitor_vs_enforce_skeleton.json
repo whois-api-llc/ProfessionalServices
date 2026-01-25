@@ -1,0 +1,122 @@
+{
+  "playbook": {
+    "name": "FirstWatch - Monitor vs Enforce (Corroboration) [Skeleton]",
+    "description": "Reference skeleton showing how to call custom function firstwatch_risk_score and route to watchlist/block actions.",
+    "version": 1,
+    "type": "playbook",
+    "tags": ["firstwatch", "nrd", "domain-intel", "corroboration"],
+    "inputs": [
+      {"name": "domain", "type": "string", "required": true, "description": "Domain to evaluate"},
+      {"name": "confidence", "type": "number", "required": false, "description": "FirstWatch/STIX confidence (0-100)"},
+      {"name": "classification", "type": "string", "required": false, "description": "malicious/benign/anomalous/unknown"},
+      {"name": "tlp", "type": "string", "required": false, "description": "CLEAR/GREEN/AMBER/RED"},
+      {"name": "domain_age_days", "type": "number", "required": false},
+      {"name": "brand_similarity", "type": "number", "required": false},
+      {"name": "has_dns", "type": "boolean", "required": false},
+      {"name": "pDNS_hits", "type": "number", "required": false},
+      {"name": "corroborated", "type": "boolean", "required": false, "description": "True if validated by telemetry"}
+    ],
+    "blocks": [
+      {
+        "id": "b1",
+        "type": "action",
+        "name": "WHOIS Lookup",
+        "action": "whois domain",
+        "asset": "whois",
+        "parameters": {
+          "domain": "{{ playbook.input.domain }}"
+        },
+        "outputs": {
+          "registrar": "artifact:whois.registrar",
+          "created": "artifact:whois.created"
+        }
+      },
+      {
+        "id": "b2",
+        "type": "action",
+        "name": "DNS Resolve",
+        "action": "dns resolve",
+        "asset": "dns",
+        "parameters": {
+          "domain": "{{ playbook.input.domain }}"
+        },
+        "outputs": {
+          "a_records": "artifact:dns.a_records",
+          "cname": "artifact:dns.cname"
+        }
+      },
+      {
+        "id": "b3",
+        "type": "custom_function",
+        "name": "FirstWatch Risk Score (Custom Function)",
+        "function": "firstwatch_risk_score",
+        "parameters": {
+          "confidence": "{{ playbook.input.confidence }}",
+          "tlp": "{{ playbook.input.tlp | default('AMBER') }}",
+          "classification": "{{ playbook.input.classification | default('unknown') }}",
+          "domain_age_days": "{{ playbook.input.domain_age_days }}",
+          "brand_similarity": "{{ playbook.input.brand_similarity }}",
+          "has_dns": "{{ playbook.input.has_dns }}",
+          "pDNS_hits": "{{ playbook.input.pDNS_hits }}",
+          "corroborated": "{{ playbook.input.corroborated | default(false) }}"
+        },
+        "outputs": {
+          "risk_score": "playbook.output.risk_score",
+          "risk_level": "playbook.output.risk_level",
+          "reasons": "playbook.output.reasons"
+        }
+      },
+      {
+        "id": "b4",
+        "type": "decision",
+        "name": "Corroboration Gate",
+        "conditions": [
+          {
+            "name": "Enforce",
+            "expression": "{{ playbook.input.corroborated == true or playbook.output.risk_level in ['HIGH','CRITICAL'] }}"
+          },
+          {
+            "name": "Monitor",
+            "expression": "{{ playbook.input.corroborated != true and playbook.output.risk_level in ['LOW','MEDIUM'] }}"
+          }
+        ],
+        "routes": {
+          "Enforce": "b5",
+          "Monitor": "b6"
+        }
+      },
+      {
+        "id": "b5",
+        "type": "action",
+        "name": "Block Domain (Replace with Your Control)",
+        "action": "block domain",
+        "asset": "dns_security_or_proxy",
+        "parameters": {
+          "domain": "{{ playbook.input.domain }}",
+          "reason": "FirstWatch corroboration or HIGH/CRITICAL risk: {{ playbook.output.reasons | join('; ') }}"
+        }
+      },
+      {
+        "id": "b6",
+        "type": "action",
+        "name": "Add to Watchlist",
+        "action": "add to watchlist",
+        "asset": "watchlist_or_case_mgmt",
+        "parameters": {
+          "domain": "{{ playbook.input.domain }}",
+          "notes": "Monitor only. Reasons: {{ playbook.output.reasons | join('; ') }}"
+        }
+      }
+    ],
+    "outputs": [
+      {"name": "risk_score", "type": "number"},
+      {"name": "risk_level", "type": "string"},
+      {"name": "reasons", "type": "string"}
+    ],
+    "notes": [
+      "This is a simplified skeleton (not a guaranteed importable export).",
+      "Replace action names/assets with those in your Phantom environment.",
+      "Use corroboration from Splunk ES / proxy logs / email telemetry to set input.corroborated."
+    ]
+  }
+}

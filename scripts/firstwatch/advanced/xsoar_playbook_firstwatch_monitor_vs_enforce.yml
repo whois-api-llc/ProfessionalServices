@@ -1,0 +1,220 @@
+# Cortex XSOAR Playbook (Example)
+# File: xsoar_playbook_firstwatch_monitor_vs_enforce.yml
+# Purpose: Conservative "Monitor vs Enforce" workflow with corroboration gates.
+#
+# Key idea:
+#   - FirstWatch indicators are treated as early signals.
+#   - Enforcement requires corroboration from telemetry (email/web/proxy/DNS logs) OR analyst approval.
+#
+# Notes:
+#   - Replace placeholder commands with those available in your tenant.
+#   - Map incident fields to your schema (e.g., incident.firstwatch_stix_bundle, incident.confirmed_abuse_telemetry).
+#   - Consider adding a human-in-the-loop task for HIGH/CRITICAL outcomes.
+
+id: FirstWatch - Monitor vs Enforce (Corroboration) (Reference)
+version: -1
+name: FirstWatch - Monitor vs Enforce (Corroboration) (Reference)
+description: >
+  Parse FirstWatch STIX/JSON output, enrich domains, assign a risk decision, and enforce only if corroborated.
+starttaskid: "0"
+
+tasks:
+  "0":
+    id: "0"
+    taskid: "00000000-0000-0000-0000-000000000000"
+    type: start
+    task:
+      id: "00000000-0000-0000-0000-000000000000"
+      version: -1
+      name: Start
+    nexttasks:
+      '#none#':
+        - "10"
+
+  "10":
+    id: "10"
+    taskid: "10101010-1010-1010-1010-101010101010"
+    type: regular
+    task:
+      id: "10101010-1010-1010-1010-101010101010"
+      version: -1
+      name: Parse STIX Bundle (FirstWatch)
+      description: Parse the STIX bundle stored in an incident field.
+      script: Builtin|||ParseJSON
+    scriptarguments:
+      json:
+        simple: ${incident.firstwatch_stix_bundle}
+    nexttasks:
+      '#none#':
+        - "20"
+
+  "20":
+    id: "20"
+    taskid: "20202020-2020-2020-2020-202020202020"
+    type: regular
+    task:
+      id: "20202020-2020-2020-2020-202020202020"
+      version: -1
+      name: Extract Domains & Indicators
+      description: Extract domain-name values and indicator confidence/labels.
+      script: Builtin|||Set
+    scriptarguments:
+      key:
+        simple: FirstWatch.Domains
+      value:
+        simple: ${ParseJSON.value.objects(type == 'domain-name').value}
+    nexttasks:
+      '#none#':
+        - "25"
+
+  "25":
+    id: "25"
+    taskid: "25252525-2525-2525-2525-252525252525"
+    type: regular
+    task:
+      id: "25252525-2525-2525-2525-252525252525"
+      version: -1
+      name: Capture Confidence & Labels
+      description: Store indicator confidence and labels into context for decisioning.
+      script: Builtin|||Set
+    scriptarguments:
+      key:
+        simple: FirstWatch.Indicator
+      value:
+        simple: ${ParseJSON.value.objects(type == 'indicator')[0]}
+    nexttasks:
+      '#none#':
+        - "30"
+
+  "30":
+    id: "30"
+    taskid: "30303030-3030-3030-3030-303030303030"
+    type: regular
+    task:
+      id: "30303030-3030-3030-3030-303030303030"
+      version: -1
+      name: DNS Resolve (Enrichment)
+      description: Resolve domains (replace with your DNS integration command).
+      script: '|||dns-resolve'
+    scriptarguments:
+      domain:
+        simple: ${FirstWatch.Domains}
+    nexttasks:
+      '#none#':
+        - "40"
+
+  "40":
+    id: "40"
+    taskid: "40404040-4040-4040-4040-404040404040"
+    type: regular
+    task:
+      id: "40404040-4040-4040-4040-404040404040"
+      version: -1
+      name: WHOIS / Registration Enrichment
+      description: Perform WHOIS lookup (replace with your WHOIS integration command).
+      script: '|||whois'
+    scriptarguments:
+      query:
+        simple: ${FirstWatch.Domains}
+    nexttasks:
+      '#none#':
+        - "50"
+
+  "50":
+    id: "50"
+    taskid: "50505050-5050-5050-5050-505050505050"
+    type: condition
+    task:
+      id: "50505050-5050-5050-5050-505050505050"
+      version: -1
+      name: Decision: Corroborated?
+      description: Enforce only if corroboration telemetry exists OR an analyst sets approval.
+    conditions:
+      - label: "Corroborated"
+        condition:
+          - operator: isNotEmpty
+            left:
+              value:
+                simple: ${incident.confirmed_abuse_telemetry}
+              iscontext: true
+      - label: "AnalystApproved"
+        condition:
+          - operator: isEqualString
+            left:
+              value:
+                simple: ${incident.analyst_approval}
+              iscontext: true
+            right:
+              value:
+                simple: "approved"
+    nexttasks:
+      Corroborated:
+        - "70"
+      AnalystApproved:
+        - "70"
+      '#default#':
+        - "60"
+
+  "60":
+    id: "60"
+    taskid: "60606060-6060-6060-6060-606060606060"
+    type: regular
+    task:
+      id: "60606060-6060-6060-6060-606060606060"
+      version: -1
+      name: Monitor Only (Watchlist + Alert)
+      description: Add domains to monitoring list; alert analysts; no enforcement.
+      script: '|||add-to-watchlist'
+    scriptarguments:
+      domain:
+        simple: ${FirstWatch.Domains}
+      list:
+        simple: FirstWatch-Monitor
+    nexttasks:
+      '#none#':
+        - "80"
+
+  "70":
+    id: "70"
+    taskid: "70707070-7070-7070-7070-707070707070"
+    type: regular
+    task:
+      id: "70707070-7070-7070-7070-707070707070"
+      version: -1
+      name: Enforce (Block) + Notify
+      description: Block domain via DNS/Proxy/Email integration (replace with your enforcement command).
+      script: '|||block-domain'
+    scriptarguments:
+      domain:
+        simple: ${FirstWatch.Domains}
+      reason:
+        simple: FirstWatch corroborated abuse or analyst approved.
+    nexttasks:
+      '#none#':
+        - "80"
+
+  "80":
+    id: "80"
+    taskid: "80808080-8080-8080-8080-808080808080"
+    type: regular
+    task:
+      id: "80808080-8080-8080-8080-808080808080"
+      version: -1
+      name: Tag & Close
+      description: Tag incident outcome for audit and metrics.
+      script: Builtin|||SetIncident
+    scriptarguments:
+      labels:
+        simple: firstwatch,monitor-vs-enforce,completed
+    nexttasks:
+      '#none#':
+        - "90"
+
+  "90":
+    id: "90"
+    taskid: "90909090-9090-9090-9090-909090909090"
+    type: title
+    task:
+      id: "90909090-9090-9090-9090-909090909090"
+      version: -1
+      name: Done
