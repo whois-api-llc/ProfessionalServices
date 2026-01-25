@@ -1,6 +1,12 @@
-FirstWatch™
+# 🛰️ FirstWatch™
+### Malicious Domain Registration Monitoring & Early-Stage Threat Intelligence
 
-Malicous Domain Registration Monitoring and Early-Stage Threat Intelligence
+> **Detect threats at domain creation — not after damage is done.**
+
+---
+
+## 🔍 Overview
+
 
 Overview
 
