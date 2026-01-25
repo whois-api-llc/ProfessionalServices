@@ -8,7 +8,7 @@ FirstWatch is a domain registration monitoring and WHOIS intelligence solution t
 Many cyber threats—including phishing, malware delivery, fraud, and brand impersonation—rely on domains registered shortly before use. Traditional reputation-based systems often identify these domains only after abuse has already occurred.
 FirstWatch enables organizations to identify, investigate, and operationalize intelligence on suspicious domains at the earliest stages of their lifecycle.
 
-Why Use FirstWatch?
+** Why Use FirstWatch? **
 
    FirstWatch helps organizations move upstream in the threat lifecycle by focusing on domain creation and registration behavior, rather than waiting for domains to accumulate reputation.
 
@@ -20,13 +20,14 @@ Organizations use FirstWatch to:
    - Enrich investigations with WHOIS, registrar, and nameserver context
    - Integrate early indicators into existing security and intelligence workflows
 
-What the FirstWatch Automation Script Provides
+** What the FirstWatch Automation Script Provides **
 
-The FirstWatch API delivers domain intelligence at scale. This automation script operationalizes that data for security, intelligence, and research use cases.
+   The FirstWatch API delivers domain intelligence at scale. This automation script operationalizes that data for security, intelligence, and research use cases.
 
-Core Capabilities
+** Core Capabilities **
 
 Domain Discovery
+
    - Exact domain lookup for known indicators
    - Fuzzy search for look-alike, typo-squatted, and brand-abuse domains
    - Optional fallback from exact lookup to fuzzy search
@@ -47,19 +48,18 @@ Operational Reliability
    - Optional quota validation before execution
    - Streaming output suitable for large domain lists
 
-Configuration-Driven Operation
+** Configuration-Driven Operation **
 
    - Default behavior defined via configuration file
    - Command-line overrides when required
    - Designed for scheduled jobs, CI/CD pipelines, and SOAR integrations
 
-How FirstWatch Fits Into Your Security Stack
+** How FirstWatch Fits Into Your Security Stack **
 
-FirstWatch is designed to complement existing security and intelligence platforms, not replace them.
+   - FirstWatch is designed to complement existing security and intelligence platforms, not replace them.
+   - It typically operates upstream of enforcement and response controls, providing early indicators that enhance downstream systems.
 
-It typically operates upstream of enforcement and response controls, providing early indicators that enhance downstream systems.
-
-Common integration patterns include:
+** Common integration patterns include: **
 
    Threat Intelligence Platforms (TIPs)
       - Ingest FirstWatch STIX bundles to enrich existing indicator repositories and support analyst investigations.
@@ -76,18 +76,29 @@ Common integration patterns include:
    Incident Response and Hunting Workflows
       - Pivot from known IOCs to related domain infrastructure during investigations.
 
-By focusing on domain registration activity, FirstWatch adds visibility at a stage where many security stacks traditionally have limited coverage.
+   By focusing on domain registration activity, FirstWatch adds visibility at a stage where many security stacks traditionally have limited coverage.
 
-Who Uses FirstWatch and How
+** Who Uses FirstWatch and How **
 
-- Security Operations (SOC)	Monitor newly registered domains related to alerts or brands	Earlier detection of phishing and fraud
-- Threat Intelligence Teams	Track emerging infrastructure and campaign setup	Improved campaign visibility and correlation
-- Brand Protection Teams	Identify impersonation and typo-squatting domains	Reduced brand and customer abuse
-- Incident Response	Pivot from known indicators to related domains	Faster scoping and containment
-- SOAR & Automation Engineers	Feed indicators into automated workflows	Reduced manual effort and faster response
-- Fraud & Trust Teams	Detect scam infrastructure early	Lower financial and reputational risk
-- Researchers & Analysts	Analyze registration patterns and abuse trends	Improved intelligence reporting
+   - Security Operations (SOC)
+      - Monitor newly registered domains related to alerts or brands	Earlier detection of phishing and fraud
+   - Threat Intelligence Teams
+      - Track emerging infrastructure and campaign setup	Improved campaign visibility and correlation
+   - Brand Protection Teams
+      - Identify impersonation and typo-squatting domains
+      - Reduced brand and customer abuse
+   - Incident Response
+        - Pivot from known indicators to related domains	Faster scoping and containment
+   - SOAR & Automation Engineers
+      - Feed indicators into automated workflows
+      - Reduced manual effort and faster response
+   - Fraud & Trust Teams
+      - Detect scam infrastructure early
+      - Lower financial and reputational risk
+   - Researchers & Analysts
+      - Analyze registration patterns and abuse trends
+      - Improved intelligence reporting
 
-Summary
+** Summary **
 
 FirstWatch provides early, actionable insight into domain registrations, which are often the first observable step in cyber abuse. By combining domain monitoring, WHOIS intelligence, and automation-ready outputs—including STIX—FirstWatch enables organizations to detect, investigate, and respond to threats earlier in their lifecycle.  For teams that require proactive domain intelligence rather than reactive reputation checks, FirstWatch offers a practical and scalable solution.
