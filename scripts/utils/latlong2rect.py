@@ -12,16 +12,31 @@ Longitude offset must account for the fact that longitude degrees get narrower a
 
 Input validation handles invalid numbers (letters, symbols) with a re-prompt, and checks that lat/lon are in valid ranges and distance is positive.
 
-Example Output from Cape Coral, Florida, USA at 1.5 miles:
+Example input and output from downtown San Francisco, CA, USA at 0.25 miles:
 
-   Center Point   : (26.5629, -81.9495)
-   Distance       : 1.5 mile(s) from center to each edge
-   -------------------------------------------------------
-   Upper-Left     : (26.584610, -81.975048)
-   Upper-Right    : (26.584610, -81.924952)
-   Lower-Left     : (26.541190, -81.975048)
-   Lower-Right    : (26.541190, -81.924952)
-   Rectangle size : ~3.0 mi (N-S) × ~3.0 mi (E-W)
+$ python latlong.py
+=======================================================
+   Bounding Rectangle Calculator
+=======================================================
+Enter a center point and a distance (in miles).
+The script will compute the upper-left and lower-right
+corners of the bounding rectangle.
+
+  Center Latitude   (-90  to  90 ): 37.79002270288523
+  Center Longitude  (-180 to 180 ): -122.39721443415249
+  Distance in miles (e.g. 1.5    ): 0.25
+
+=======================================================
+  Center Point   : (37.79002270288523, -122.39721443415249)
+  Distance       : 0.25 mile(s) from center to each edge
+-------------------------------------------------------
+  Upper-Left     : (37.793641, -122.401793)
+  Upper-Right    : (37.793641, -122.392636)
+  Lower-Left     : (37.786404, -122.401793)
+  Lower-Right    : (37.786404, -122.392636)
+=======================================================
+
+  Rectangle size : ~0.5 mi (N-S) × ~0.5 mi (E-W)
 
 """
 
