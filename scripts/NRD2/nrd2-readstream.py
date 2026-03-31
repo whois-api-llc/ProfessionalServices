@@ -1,134 +1,261 @@
 #!/usr/bin/env python3
+"""
+NRD (Newly Registered Domains) Stream Client
+WHOISXMLAPI.COM - Professional Services 03/31/2026.  Provided "as-is".
+Connects to the WhoisXML API WebSocket stream and logs newly added domains.
+  example: $ nrd2-readstream.py 
+"""
 
 import json
 import sys
 import signal
-from websocket import create_connection, WebSocketTimeoutException
+import logging
+import threading
+import argparse
+from collections import defaultdict
+from dataclasses import dataclass, field
 from datetime import datetime
+from io import TextIOWrapper
+from queue import Queue, Empty
+from websocket import create_connection, WebSocketTimeoutException, WebSocketConnectionClosedException
 
-API_KEY = "your_api_key_here"  # Replace with your actual API key
-BUFFER_SIZE = 100
+# ── Configuration ─────────────────────────────────────────────────────────────
 
-if len(sys.argv) != 2:
-    print("ERROR: Please specify an output file as command line argument.")
-    print("Usage: python3 script.py output_file.txt")
-    sys.exit(1)
+API_KEY      = "YOUR_API_KEY_HERE" # or read from environment
+WS_URL       = "wss://nrd-stream.whoisxmlapi.com/ultimate"
+BUFFER_SIZE  = 500          # rows before flushing to disk
+WS_TIMEOUT   = 2.0          # seconds between recv() polls
+MAX_RETRIES  = 5            # reconnect attempts before giving up
+RETRY_DELAY  = 5            # seconds between reconnect attempts
+WRITE_QUEUE_MAX = 10_000    # max rows queued for the writer thread
 
-OUTPUT_FILE = sys.argv[1]
+REASONS = {"added", "discovered", "updated", "dropped"}
 
-try:
-    output_file = open(OUTPUT_FILE, 'w')
-    output_file.write("Timestamp,DomainName\n")
-except IOError as e:
-    print(f"ERROR: Could not open output file {OUTPUT_FILE}: {e}")
-    sys.exit(1)
+# ── Logging ───────────────────────────────────────────────────────────────────
 
-ws_url = "wss://nrd-stream.whoisxmlapi.com/ultimate"
-print(f"Connecting to {ws_url}...")
-ws = create_connection(ws_url)
-ws.settimeout(1.0)  # Set a 1-second timeout for recv()
-ws.send(API_KEY)
-print("API Key Sent")
-print("Receiving WHOIS data (press Ctrl+C to terminate)...")
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+log = logging.getLogger(__name__)
 
-txCounter = 0
-recCounter = 0
-unknownVerb = 0
-domainAdded = 0
-domainUpdated = 0
-domainDiscovered = 0
-domainDropped = 0
-write_buffer = []
+# ── Stats ─────────────────────────────────────────────────────────────────────
 
-# Flag to indicate shutdown
-shutdown_flag = False
+@dataclass
+class Stats:
+    transactions: int = 0
+    records_total: int = 0
+    counts: defaultdict = field(default_factory=lambda: defaultdict(int))
 
-def signal_handler(sig, frame):
-    global shutdown_flag
-    print("\nCtrl+C detected, initiating shutdown...")
-    shutdown_flag = True  # Set flag to exit main loop
+    def bump(self, reason: str) -> None:
+        self.counts[reason] += 1
 
-signal.signal(signal.SIGINT, signal_handler)
+    def report(self) -> str:
+        c = self.counts
+        return (
+            f"transactions={self.transactions}  total={self.records_total}  "
+            f"added={c['added']}  discovered={c['discovered']}  "
+            f"updated={c['updated']}  dropped={c['dropped']}  "
+            f"unknown={c['unknown']}"
+        )
 
-def cleanup():
-    """Clean up resources before exit."""
-    if write_buffer:
-        output_file.writelines(write_buffer)
-        output_file.flush()
-    ws.close()
-    output_file.close()
-    print("WebSocket closed.")
-    print(f"Output file {OUTPUT_FILE} closed.")
+# ── Writer thread ─────────────────────────────────────────────────────────────
 
-while not shutdown_flag:
+class DomainWriter(threading.Thread):
+    """Dedicated thread that owns all file I/O to avoid lock contention."""
+
+    SENTINEL = None  # poison-pill to signal shutdown
+
+    def __init__(self, filepath: str, queue: Queue, fmt: str = "CSV"):
+        super().__init__(name="DomainWriter", daemon=True)
+        self._filepath = filepath
+        self._queue = queue
+        self._fmt = fmt.upper()
+        self._file: TextIOWrapper | None = None
+
+    def _format_row(self, timestamp: str, reason: str, domain: str) -> str:
+        if self._fmt == "JSON":
+            return json.dumps({
+                "timestamp": timestamp,
+                "reason":    reason,
+                "domain":    domain,
+            }) + "\n"
+        # CSV — quote domain in case it ever contains a comma
+        return f'{timestamp},{reason},"{domain}"\n'
+
+    def run(self) -> None:
+        try:
+            with open(self._filepath, "w", buffering=1) as f:
+                if self._fmt == "CSV":
+                    f.write("Timestamp,Reason,DomainName\n")
+
+                buf: list[str] = []
+
+                while True:
+                    try:
+                        item = self._queue.get(timeout=1.0)
+                    except Empty:
+                        # Flush partial buffer periodically even if quiet
+                        if buf:
+                            f.writelines(buf)
+                            f.flush()
+                            buf.clear()
+                        continue
+
+                    if item is self.SENTINEL:
+                        break
+
+                    buf.append(item)
+                    if len(buf) >= BUFFER_SIZE:
+                        f.writelines(buf)
+                        f.flush()
+                        buf.clear()
+
+                # Drain remaining rows on shutdown
+                if buf:
+                    f.writelines(buf)
+        except IOError as exc:
+            log.error("Writer thread IO error: %s", exc)
+        finally:
+            log.info("Writer thread finished.")
+
+    def enqueue(self, timestamp: str, reason: str, domain: str) -> None:
+        self._queue.put(self._format_row(timestamp, reason, domain))
+
+    def stop(self) -> None:
+        self._queue.put(self.SENTINEL)
+        self.join(timeout=10)
+
+# ── WebSocket helpers ─────────────────────────────────────────────────────────
+
+def connect(ws_url: str, api_key: str):
+    """Create an authenticated WebSocket connection."""
+    log.info("Connecting to %s ...", ws_url)
+    ws = create_connection(ws_url)
+    ws.settimeout(WS_TIMEOUT)
+    ws.send(api_key)
+    log.info("Authenticated — streaming NRD data (Ctrl+C to stop).")
+    return ws
+
+
+def process_record(raw: str, stats: Stats, writer: DomainWriter) -> None:
+    """Parse one JSON line and dispatch it."""
     try:
-        txCounter += 1
-        result = ws.recv()
-        rLength = len(result)
-        print(f"{rLength} characters received in transaction '{txCounter}'")
+        record = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        log.warning("JSON decode error (record %d): %s", stats.records_total, exc)
+        return
 
-        recTxCounter = 0
-        for json_line in result.splitlines():
-            json_line = json_line.strip()
-            if not json_line:
-                continue
-            recCounter += 1
-            recTxCounter += 1
-            try:
-                record = json.loads(json_line)
-                domainReason = record.get("reason", "unknown")
-                domainName = record.get("domainName", "N/A")
-                IANAID = record.get("registrarIANAID", "N/A")
-                domainRegistrar = record.get("registrarName", "N/A")
+    reason    = record.get("reason", "unknown")
+    domain    = record.get("domainName", "N/A")
+    iana_id   = record.get("registrarIANAID", "N/A")
+    registrar = record.get("registrarName", "N/A")
 
-                if domainReason == "added":
-                    domainAdded += 1
-                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-                    write_buffer.append(f"{timestamp},{domainName}\n")
-                    if len(write_buffer) >= BUFFER_SIZE:
-                        output_file.writelines(write_buffer)
-                        output_file.flush()
-                        write_buffer.clear()
-                elif domainReason == "discovered":
-                    domainDiscovered += 1
-                elif domainReason == "updated":
-                    domainUpdated += 1
-                elif domainReason == "dropped":
-                    domainDropped += 1
-                else:
-                    unknownVerb += 1
+    stats.bump(reason if reason in REASONS else "unknown")
+    stats.records_total += 1
 
-                print(f"\n[Record#:{recCounter}] reason:{domainReason:<12} "
-                      f"registrarIANAID:{IANAID:<5} domainName:{domainName}  "
-                      f"(registrarName:{domainRegistrar})\n")
+    log.info("%-12s %s", reason, domain)
 
-            except json.JSONDecodeError as e:
-                print(f"ERROR: Record no. {recCounter} FAILED TO DECODE: {e}")
+    if reason == "added":
+        ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+        writer.enqueue(ts, reason, domain)
 
-        if write_buffer:
-            output_file.writelines(write_buffer)
-            output_file.flush()
-            write_buffer.clear()
 
-        print(f"\n+++ End of transaction {txCounter}, added: {domainAdded}, "
-              f"discovered: {domainDiscovered}, updated: {domainUpdated}, "
-              f"dropped: {domainDropped}")
-        print(f"{recTxCounter} records received in transaction {txCounter}, "
-              f"{recCounter} in total.")
+def stream_loop(ws_url: str, api_key: str, writer: DomainWriter, stats: Stats,
+                stop_event: threading.Event) -> None:
+    """Main receive loop with automatic reconnection."""
+    retries = 0
 
-    except WebSocketTimeoutException:
-        # Timeout occurred, check for shutdown flag
-        if shutdown_flag:
+    while not stop_event.is_set():
+        try:
+            ws = connect(ws_url, api_key)
+            retries = 0  # reset on successful connection
+
+            while not stop_event.is_set():
+                try:
+                    payload = ws.recv()
+                except WebSocketTimeoutException:
+                    continue  # normal poll timeout — check stop_event
+                except WebSocketConnectionClosedException:
+                    log.warning("Connection closed by server.")
+                    break
+
+                stats.transactions += 1
+                lines = [l.strip() for l in payload.splitlines() if l.strip()]
+
+                for line in lines:
+                    process_record(line, stats, writer)
+
+                log.info(
+                    "tx=%d  lines=%d  %s",
+                    stats.transactions, len(lines), stats.report(),
+                )
+
+            ws.close()
+
+        except ConnectionError as exc:
+            log.error("Connection error: %s", exc)
+        except Exception as exc:
+            log.error("Unexpected error: %s", exc)
+
+        if stop_event.is_set():
             break
-        continue  # Normal timeout, keep looping
-    except ConnectionError:
-        print("Connection error occurred.")
-        break
-    except Exception as e:
-        print(f"Unexpected error: {e}")
-        break
 
-# Perform cleanup on exit
-cleanup()
-print("Script terminated cleanly.")
-sys.exit(0)
+        retries += 1
+        if retries > MAX_RETRIES:
+            log.error("Max retries (%d) reached — giving up.", MAX_RETRIES)
+            break
+
+        log.info("Reconnecting in %ds (attempt %d/%d)...", RETRY_DELAY, retries, MAX_RETRIES)
+        stop_event.wait(RETRY_DELAY)
+
+# ── Entry point ───────────────────────────────────────────────────────────────
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Stream newly registered domains from WhoisXML API.")
+    parser.add_argument("output_file", help="Output file path.")
+    parser.add_argument(
+        "--outputFormat",
+        choices=["CSV", "JSON"],
+        default="CSV",
+        metavar="CSV|JSON",
+        help="Output format: CSV (default) or JSON (newline-delimited).",
+    )
+    parser.add_argument("--debug", action="store_true", help="Enable debug-level logging.")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
+    log.info("Output format: %s", args.outputFormat)
+
+    write_queue = Queue(maxsize=WRITE_QUEUE_MAX)
+    writer      = DomainWriter(args.output_file, write_queue, fmt=args.outputFormat)
+    stats       = Stats()
+    stop_event  = threading.Event()
+
+    def handle_signal(sig, frame):
+        log.info("Shutdown signal received — stopping...")
+        stop_event.set()
+
+    signal.signal(signal.SIGINT,  handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
+
+    writer.start()
+
+    try:
+        stream_loop(WS_URL, API_KEY, writer, stats, stop_event)
+    finally:
+        writer.stop()
+        log.info("Final stats: %s", stats.report())
+        log.info("Output written to: %s", args.output_file)
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
