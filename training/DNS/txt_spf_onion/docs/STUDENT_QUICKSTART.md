@@ -17,6 +17,7 @@ pip3 install dnspython tqdm
 ```
 
 **Verify installation:**
+
 ```bash
 python -c "import dns.resolver; import tqdm; print('✓ All libraries installed!')"
 ```
@@ -24,6 +25,7 @@ python -c "import dns.resolver; import tqdm; print('✓ All libraries installed!
 ### Step 2: Get the Lab Files
 
 You should have received:
+
 - `spf_labs_working.py` - Main lab file with complete implementation
 - `your_dataset.csv` - The DNS TXT record dataset
 - This Quick Start Guide
@@ -43,6 +45,7 @@ Get-Content your_dataset.csv -Head 5
 ```
 
 You should see:
+
 ```
 d,du,txt
 example.com,1721486026,v=spf1 ip4:192.0.2.1 -all
@@ -97,6 +100,7 @@ generate_technical_report(violations, 'technical_report.txt')
 ```
 
 **Exit when done:**
+
 ```python
 exit()
 ```
@@ -132,6 +136,7 @@ print("\n✓ Analysis complete! Check the output files.")
 ```
 
 **Run it:**
+
 ```bash
 python run_labs.py
 ```
@@ -149,12 +154,14 @@ python -c "from spf_labs_working import run_full_analysis; run_full_analysis('yo
 **Create a notebook with cells:**
 
 **Cell 1:**
+
 ```python
 from spf_labs_working import *
 import pandas as pd
 ```
 
 **Cell 2:**
+
 ```python
 # Lab 1
 stats = identify_candidates('your_dataset.csv', 'candidates.csv')
@@ -162,6 +169,7 @@ print(f"Found {stats['candidates']} candidates from {stats['total_records']} rec
 ```
 
 **Cell 3:**
+
 ```python
 # Lab 2
 violations = find_violations('candidates.csv')
@@ -169,6 +177,7 @@ print(f"Found {len(violations)} violations")
 ```
 
 **Cell 4:**
+
 ```python
 # Lab 3
 generate_executive_report(violations, stats)
@@ -184,18 +193,21 @@ generate_technical_report(violations)
 **Goal:** Scan millions of records quickly to identify candidates worth investigating.
 
 **What it does:**
+
 - Streams through ALL records (memory efficient)
 - Identifies SPF records
 - Filters for suspicious patterns
 - **No DNS lookups** (keeps it fast!)
 
 **Run it:**
+
 ```python
 stats = identify_candidates('your_dataset.csv', 'candidates.csv')
 generate_phase1_report(stats)
 ```
 
 **Expected output:**
+
 ```
 Records processed: 2,500,000
 SPF records found: 450,000 (18.0%)
@@ -204,6 +216,7 @@ Processing time: 3.2 minutes
 ```
 
 **What gets flagged:**
+
 - 5+ include directives (complex chains)
 - 10+ total mechanisms
 - Suspicious domains (free DNS services, abused TLDs)
@@ -214,17 +227,20 @@ Processing time: 3.2 minutes
 **Goal:** Perform DNS lookups on candidates to find actual RFC violations.
 
 **What it does:**
+
 - DNS lookups on filtered candidates only
 - Recursively follows SPF chains
 - Counts actual DNS lookups
 - Uses aggressive caching
 
 **Run it:**
+
 ```python
 violations = find_violations('candidates.csv')
 ```
 
 **Expected output:**
+
 ```
 Analyzing 1,247 candidates...
 DNS Cache Performance:
@@ -234,6 +250,7 @@ VIOLATIONS FOUND: 89 domains exceed 10 DNS lookups
 ```
 
 **What counts as a violation:**
+
 - More than 10 DNS lookups (RFC 7208 limit)
 - These domains will have email delivery issues
 
@@ -242,18 +259,21 @@ VIOLATIONS FOUND: 89 domains exceed 10 DNS lookups
 **Goal:** Generate actionable reports for security teams.
 
 **What it does:**
+
 - Executive summary (high-level stats)
 - Technical report (detailed findings)
 - Threat scoring
 - Remediation recommendations
 
 **Run it:**
+
 ```python
 generate_executive_report(violations, stats)
 generate_technical_report(violations, 'technical_report.txt')
 ```
 
 **Generated files:**
+
 - `technical_report.txt` - Detailed findings with recommendations
 
 ---
@@ -263,6 +283,7 @@ generate_technical_report(violations, 'technical_report.txt')
 ### Error: "ModuleNotFoundError: No module named 'dns'"
 
 **Fix:**
+
 ```bash
 pip install dnspython
 # NOT just "pip install dns" - that's a different package!
@@ -271,6 +292,7 @@ pip install dnspython
 ### Error: "FileNotFoundError: [Errno 2] No such file or directory"
 
 **Fix:** Make sure you're in the right directory
+
 ```bash
 # Check your current directory
 pwd  # Mac/Linux
@@ -289,6 +311,7 @@ cd /path/to/your/lab/files
 **Cause:** Loading too much data into memory at once
 
 **Fix:** The code uses generators by default, but if you modified it:
+
 ```python
 # WRONG - loads everything into memory:
 records = list(stream_spf_records('your_dataset.csv'))
@@ -301,11 +324,13 @@ for record in stream_spf_records('your_dataset.csv'):
 ### Program is running very slowly
 
 **Check:**
+
 1. Are you using an HDD (not SSD)? This will be slower
 2. Are you reading the file multiple times?
 3. Are you using the caching resolver?
 
 **Speed test:**
+
 ```python
 import time
 start = time.time()
@@ -320,6 +345,7 @@ Should see: 50,000+ records/second
 ### No progress bar showing
 
 **Install tqdm:**
+
 ```bash
 pip install tqdm
 ```
@@ -378,6 +404,7 @@ dir *.csv *.txt
 After running all labs, you should see:
 
 **Phase 1 Output:**
+
 ```
 ======================================================================
 PHASE 1: FAST SCAN RESULTS
@@ -396,6 +423,7 @@ Top reasons for flagging:
 ```
 
 **Phase 2 Output:**
+
 ```
 ======================================================================
 PHASE 2: DEEP ANALYSIS RESULTS
@@ -413,6 +441,7 @@ TOP VIOLATIONS:
 ```
 
 **Generated Files:**
+
 - `candidates.csv` - Filtered domains from Phase 1
 - `technical_report.txt` - Detailed findings from Phase 2/3
 
@@ -421,11 +450,13 @@ TOP VIOLATIONS:
 ## 🎯 Quick Reference Commands
 
 **Start interactive session:**
+
 ```bash
 python -i spf_labs_working.py
 ```
 
 **Run full analysis:**
+
 ```python
 # All-in-one command
 run_full_analysis('your_dataset.csv')
@@ -438,11 +469,13 @@ generate_technical_report(violations)
 ```
 
 **Quick test:**
+
 ```python
 quick_test('your_dataset.csv', num_records=10)
 ```
 
 **Exit Python:**
+
 ```python
 exit()
 # or Ctrl+D (Mac/Linux) / Ctrl+Z then Enter (Windows)
@@ -462,6 +495,7 @@ exit()
 ## ✅ Success Checklist
 
 **Before you start:**
+
 - [ ] Python 3.7+ installed
 - [ ] dnspython library installed
 - [ ] tqdm library installed (optional but recommended)
@@ -469,23 +503,27 @@ exit()
 - [ ] Can open the lab file in your editor
 
 **You're ready when:**
+
 - [ ] Can run `python -i spf_labs_working.py` without errors
 - [ ] Can call `quick_test()` and see output
 - [ ] Dataset file loads correctly
 
 **You've completed Lab 1 when:**
+
 - [ ] Scanned all records
 - [ ] Generated candidates.csv
 - [ ] See statistics output
 - [ ] Identified candidates
 
 **You've completed Lab 2 when:**
+
 - [ ] Analyzed all candidates
 - [ ] Found violations (>10 DNS lookups)
 - [ ] See cache statistics
 - [ ] Have list of violating domains
 
 **You've completed Lab 3 when:**
+
 - [ ] Generated executive summary
 - [ ] Created technical_report.txt
 - [ ] Have actionable findings
@@ -497,6 +535,7 @@ exit()
 ### What is an SPF Onion?
 
 An SPF Onion is a complex, multi-layered SPF record where:
+
 - Multiple `include:` directives reference other domains
 - Each referenced domain may have more includes
 - The chain can be many layers deep
@@ -505,11 +544,13 @@ An SPF Onion is a complex, multi-layered SPF record where:
 ### Why Does This Matter?
 
 **Technical Impact:**
+
 - Email delivery failures (when >10 lookups)
 - Increased DNS load
 - Slower email processing
 
 **Security Impact:**
+
 - Complex records are harder to audit
 - Third-party services increase attack surface
 - Can be used to obfuscate phishing infrastructure
@@ -517,12 +558,14 @@ An SPF Onion is a complex, multi-layered SPF record where:
 ### The Two-Phase Strategy
 
 **Phase 1: Fast Scan (Static Analysis)**
+
 - No network calls
 - Pure pattern matching
 - Process millions of records in minutes
 - Goal: Find candidates worth investigating
 
 **Phase 2: Deep Analysis (Dynamic Analysis)**
+
 - DNS lookups (slow but accurate)
 - Only on filtered candidates
 - Recursive chain following

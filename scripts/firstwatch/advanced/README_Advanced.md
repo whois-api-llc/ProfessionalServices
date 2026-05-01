@@ -1,4 +1,5 @@
 # 🛰️ FirstWatch™
+
 ### Malicious Domain Registration Monitoring & Early-Stage Threat Intelligence
 
 > **Detect threats at domain creation — not after damage is done.**
@@ -45,22 +46,26 @@ This automation script operationalizes that data for:
 ## 🚀 Core Capabilities
 
 ### 🔎 Domain Discovery
+
 - Exact domain lookup
 - Fuzzy matching for look‑alike and typo‑squatted domains
 - Automatic exact → fuzzy fallback
 
 ### 📤 Output Formats
+
 - **CSV** – Analyst review and reporting
 - **JSON / JSONL** – Automation pipelines
 - **STIX 2.1** – Threat intelligence platforms
 
 ### 🧠 Threat Intelligence Integration
+
 - STIX `domain-name` and `indicator` objects
 - Configurable **TLP markings**
 - Classification labels (`malicious`, `benign`, `anomalous`)
 - Original FirstWatch enrichment preserved
 
 ### ⚙️ Operational Reliability
+
 - JWT authentication with auto‑refresh
 - Rate‑limit‑aware retries
 - Optional quota validation
@@ -71,21 +76,25 @@ This automation script operationalizes that data for:
 ## ⚡ Quick Start
 
 ### Prerequisites
+
 - Python **3.9+**
 - FirstWatch API key
 
 ### Clone
+
 ```bash
 git clone https://github.com/whois-api-llc/ProfessionalServices.git
 cd ProfessionalServices/scripts/firstwatch/advanced
 ```
 
 ### Install
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### Configure
+
 ```yaml
 auth:
   api_key: YOUR_API_KEY
@@ -108,6 +117,7 @@ runtime:
 ```
 
 ### Run
+
 ```bash
 python firstwatch.py --input domains.txt
 ```
@@ -116,17 +126,17 @@ python firstwatch.py --input domains.txt
 
 ## ⚙️ Configuration Reference
 
-| Section | Key | Type | Description |
-|------|----|----|----|
-| auth | api_key | string | FirstWatch API key |
-| output | format | string | csv \| json \| jsonl \| stix |
-| output | directory | string | Output directory |
-| stix | tlp | string | CLEAR / GREEN / AMBER / RED |
-| stix | classification | string | Indicator classification |
-| search | mode | string | exact / fuzzy / auto |
-| search | fuzzy_threshold | float | Similarity threshold |
-| runtime | validate_quota | bool | Validate API quota |
-| runtime | rate_limit_retries | int | Retry attempts |
+| Section | Key                | Type   | Description                  |
+| ------- | ------------------ | ------ | ---------------------------- |
+| auth    | api_key            | string | FirstWatch API key           |
+| output  | format             | string | csv \| json \| jsonl \| stix |
+| output  | directory          | string | Output directory             |
+| stix    | tlp                | string | CLEAR / GREEN / AMBER / RED  |
+| stix    | classification     | string | Indicator classification     |
+| search  | mode               | string | exact / fuzzy / auto         |
+| search  | fuzzy_threshold    | float  | Similarity threshold         |
+| runtime | validate_quota     | bool   | Validate API quota           |
+| runtime | rate_limit_retries | int    | Retry attempts               |
 
 ---
 
@@ -148,24 +158,26 @@ graph LR
 
 ## ⚖️ FirstWatch vs Reputation‑Based Detection
 
-| Capability | FirstWatch™ | Reputation Systems |
-|---------|-------------|-------------------|
-| Detection Timing | At registration | Post‑abuse |
-| Brand Abuse | ✅ Yes | ❌ Late |
-| Typo‑Squatting | ✅ Yes | ❌ Limited |
-| WHOIS Context | ✅ Native | ⚠️ Partial |
-| STIX Output | ✅ Yes | ⚠️ Varies |
-| Proactive Hunting | ✅ Yes | ❌ No |
+| Capability        | FirstWatch™     | Reputation Systems |
+| ----------------- | --------------- | ------------------ |
+| Detection Timing  | At registration | Post‑abuse         |
+| Brand Abuse       | ✅ Yes          | ❌ Late            |
+| Typo‑Squatting    | ✅ Yes          | ❌ Limited         |
+| WHOIS Context     | ✅ Native       | ⚠️ Partial         |
+| STIX Output       | ✅ Yes          | ⚠️ Varies          |
+| Proactive Hunting | ✅ Yes          | ❌ No              |
 
 ---
 
 ## 🎯 MITRE ATT&CK Alignment
 
 ### Primary Tactics
+
 - **TA0043 – Reconnaissance**
 - **TA0042 – Resource Development**
 
 ### Techniques
+
 - **T1583.001 – Domains**
 - **T1583.003 – DNS Providers**
 - **T1566 – Phishing**
@@ -226,17 +238,20 @@ graph LR
 ## 📊 SOAR Playbooks (Reference)
 
 ### Early Phishing Detection
+
 - Ingest FirstWatch STIX
 - Apply confidence thresholds
 - Enrich with DNS & WHOIS
 - Watchlist or alert SOC
 
 ### Infrastructure Expansion
+
 - Pivot from known IOC
 - Fuzzy match related domains
 - Cluster by registrar & nameserver
 
 ### Monitoring vs Enforcement
+
 - Monitor newly registered domains
 - Enforce only after corroboration
 
@@ -245,12 +260,14 @@ graph LR
 ## 📦 Vendor‑Specific SOAR Playbooks
 
 ### 🟦 Cortex XSOAR
+
 - STIX ingestion
 - Brand correlation
 - Incident creation
 - Confidence‑gated blocking
 
 ### 🟧 Splunk SOAR
+
 - Risk scoring
 - Watchlisting
 - Corroborated blocking
@@ -261,19 +278,22 @@ graph LR
 ## 🧱 Deployment Models
 
 ### SOC
+
 Early phishing and fraud detection
 
 ### SOAR
+
 Automation‑first enrichment and response
 
 ### Research
+
 Campaign tracking and infrastructure analysis
 
 ### MSSP
+
 Multi‑tenant early warning and brand protection
 
 ---
-
 
 ---
 
@@ -282,14 +302,15 @@ Multi‑tenant early warning and brand protection
 This repo includes **reference artifacts** you can import or adapt for common SOAR platforms.
 
 ### Cortex XSOAR (Playbook YAML Templates)
+
 - `xsoar_playbook_firstwatch_early_phishing.yml` — STIX ingestion → enrichment → confidence gates → watchlist/block
 - `xsoar_playbook_firstwatch_ioc_pivot.yml` — seed IOC → FirstWatch fuzzy search → clustering → investigation summary
 
 - `xsoar_playbook_firstwatch_monitor_vs_enforce.yml` — conservative Monitor vs Enforce workflow with corroboration and optional analyst approval
 - `splunk_soar_playbook_firstwatch_monitor_vs_enforce_skeleton.json` — Splunk SOAR (Phantom) playbook JSON skeleton demonstrating custom function call + routing
 
-
 ### Splunk SOAR (Phantom) Custom Function
+
 - `phantom_custom_function_firstwatch_risk_score.py` — explainable risk scoring for newly registered domains (auditable reasons)
 
 > These templates are intentionally conservative and include **placeholders** for integration command names (e.g., `dns-resolve`, `whois`, `block-domain`).
@@ -310,6 +331,7 @@ This repo includes **reference artifacts** you can import or adapt for common SO
 **FirstWatch™** delivers early, actionable domain intelligence at the moment of registration — where many security stacks traditionally lack visibility.
 
 By combining:
+
 - Domain monitoring
 - WHOIS intelligence
 - STIX‑ready automation
