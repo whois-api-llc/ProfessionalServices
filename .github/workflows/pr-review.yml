@@ -1,0 +1,32 @@
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    # No paths-ignore by default. Claude self-skips docs/config-only diffs
+    # via the reusable workflow's prompt and posts a "Skipped: ..." summary,
+    # which keeps the review/Claude Review check green. Adding paths-ignore
+    # here would prevent the workflow from running at all on docs-only PRs,
+    # leaving any required-check ruleset deadlocked. Add per-project ignores
+    # only when you know the ruleset doesn't require this check.
+
+# Reusable workflow's job-level permissions are CAPPED by the caller's
+# workflow-level permissions. These must match (or exceed) what the
+# reusable's claude-code-action step needs.
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    uses: topcoder1/ci-workflows/.github/workflows/claude-review.yml@main
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+    with:
+      # Optional: project-specific focus appended to the base prompt.
+      review_focus: ''
