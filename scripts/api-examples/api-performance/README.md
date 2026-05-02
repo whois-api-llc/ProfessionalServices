@@ -112,16 +112,16 @@ python whois_benchmark.py domains.txt --apiKey at_yourkey \
 
 ### 3.3 Command-line options
 
-| Option | Default | Purpose |
-|---|---|---|
-| `--apiKey` | — | WhoisXML API key. Falls back to `WXAAPI` env var. |
-| `-t, --threads` | `10` | Worker thread count for the threaded mode. |
-| `-c, --concurrency` | `20` | Maximum in-flight requests for HTTP/2 modes. |
-| `--pool-size` | `10` | Maximum HTTP/2 connections in the pool mode. |
-| `--only` | all | Whitelist of modes to run (space-separated). |
-| `--skip` | none | Blacklist of modes to skip. |
-| `--show-results` | off | Print each domain's `createdDate` after the runs. |
-| `--html-report` | — | Write a self-contained HTML report to `PATH`. |
+| Option              | Default | Purpose                                           |
+| ------------------- | ------- | ------------------------------------------------- |
+| `--apiKey`          | —       | WhoisXML API key. Falls back to `WXAAPI` env var. |
+| `-t, --threads`     | `10`    | Worker thread count for the threaded mode.        |
+| `-c, --concurrency` | `20`    | Maximum in-flight requests for HTTP/2 modes.      |
+| `--pool-size`       | `10`    | Maximum HTTP/2 connections in the pool mode.      |
+| `--only`            | all     | Whitelist of modes to run (space-separated).      |
+| `--skip`            | none    | Blacklist of modes to skip.                       |
+| `--show-results`    | off     | Print each domain's `createdDate` after the runs. |
+| `--html-report`     | —       | Write a self-contained HTML report to `PATH`.     |
 
 Valid mode names for `--only` and `--skip` are: `sequential`, `threaded`, `http2_single`, `http2_pool`.
 
@@ -253,15 +253,15 @@ After all modes complete, a comparison table sorts modes from fastest to slowest
 
 When `--html-report` is provided, a single self-contained HTML file is written. The report has the following sections:
 
-| Section | Content |
-|---|---|
-| Headline cards | One card per mode showing wall time, throughput, average latency, and protocol details. The fastest mode is tagged. |
-| Latency statistics | Full numerical comparison table covering all stats from the console output. |
-| Wall time & throughput | Dual-axis bar chart: wall time per mode on the left axis, throughput on the right. |
-| Latency distribution | Per-request latency line chart and a shared-bin histogram showing how latencies cluster across modes. |
-| Percentiles | Radar chart of min, median, p95, p99, max — useful for spotting modes that win on average but lose on tail latency. |
-| Execution timelines | A Gantt-style chart per mode showing each request as a bar, positioned by start time and sized by duration. Lanes correspond to threads (sync modes) or connections (HTTP/2 modes). |
-| Per-request detail | Collapsible table per mode with every domain, latency, start offset, lane, status, and result info. |
+| Section                | Content                                                                                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Headline cards         | One card per mode showing wall time, throughput, average latency, and protocol details. The fastest mode is tagged.                                                                 |
+| Latency statistics     | Full numerical comparison table covering all stats from the console output.                                                                                                         |
+| Wall time & throughput | Dual-axis bar chart: wall time per mode on the left axis, throughput on the right.                                                                                                  |
+| Latency distribution   | Per-request latency line chart and a shared-bin histogram showing how latencies cluster across modes.                                                                               |
+| Percentiles            | Radar chart of min, median, p95, p99, max — useful for spotting modes that win on average but lose on tail latency.                                                                 |
+| Execution timelines    | A Gantt-style chart per mode showing each request as a bar, positioned by start time and sized by duration. Lanes correspond to threads (sync modes) or connections (HTTP/2 modes). |
+| Per-request detail     | Collapsible table per mode with every domain, latency, start offset, lane, status, and result info.                                                                                 |
 
 Chart.js is loaded from a CDN and all benchmark data is embedded inline as JSON, so the report works offline once generated and can be shared as a single file.
 
@@ -313,16 +313,16 @@ Failures concentrated in time (a contiguous block of red bars in the timeline) u
 
 ## 7. Troubleshooting
 
-| Symptom | Likely cause and fix |
-|---|---|
-| `"API key required"` error. | No `--apiKey` passed and `WXAAPI` environment variable not set. Pass the key explicitly or export the variable before running. |
-| HTTP/2 modes skipped with warning. | `httpx` not installed. Run: `pip install "httpx[http2]"`. The `h2` extra is required; plain httpx will not negotiate HTTP/2. |
+| Symptom                                               | Likely cause and fix                                                                                                                                                                                                                 |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `"API key required"` error.                           | No `--apiKey` passed and `WXAAPI` environment variable not set. Pass the key explicitly or export the variable before running.                                                                                                       |
+| HTTP/2 modes skipped with warning.                    | `httpx` not installed. Run: `pip install "httpx[http2]"`. The `h2` extra is required; plain httpx will not negotiate HTTP/2.                                                                                                         |
 | HTTP/2 modes show `"HTTP/1.1"` in the protocol field. | The server did not negotiate HTTP/2 via ALPN. Either the server does not support HTTP/2 or an intermediate proxy is downgrading the connection. The mode still runs (async over HTTP/1.1) but is not testing what its name suggests. |
-| Threaded mode is slower than sequential. | Server-side rate limiting or per-IP concurrency limit. Lower `-t` and try again. If the issue persists, check your account's rate-limit documentation. |
-| All modes have very similar wall times. | The network is the bottleneck — most likely high RTT. Run from a host closer to the server, or accept that concurrency cannot help in this environment. |
-| Failures cluster at the start of the run. | TLS handshake or DNS issue on first connection. Re-run; if persistent, check the network path with `curl` or `openssl s_client`. |
-| Failures cluster at the end of the run. | Account quota likely exhausted. Check the account dashboard or wait for the quota window to reset. |
-| HTML report is generated but charts are blank. | Chart.js could not be loaded from the CDN. Open the report on a machine with internet access, or download `chart.umd.min.js` and adjust the script tag to point to a local copy. |
+| Threaded mode is slower than sequential.              | Server-side rate limiting or per-IP concurrency limit. Lower `-t` and try again. If the issue persists, check your account's rate-limit documentation.                                                                               |
+| All modes have very similar wall times.               | The network is the bottleneck — most likely high RTT. Run from a host closer to the server, or accept that concurrency cannot help in this environment.                                                                              |
+| Failures cluster at the start of the run.             | TLS handshake or DNS issue on first connection. Re-run; if persistent, check the network path with `curl` or `openssl s_client`.                                                                                                     |
+| Failures cluster at the end of the run.               | Account quota likely exhausted. Check the account dashboard or wait for the quota window to reset.                                                                                                                                   |
+| HTML report is generated but charts are blank.        | Chart.js could not be loaded from the CDN. Open the report on a machine with internet access, or download `chart.umd.min.js` and adjust the script tag to point to a local copy.                                                     |
 
 ---
 

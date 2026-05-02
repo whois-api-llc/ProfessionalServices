@@ -6,7 +6,7 @@ find-ip-using-csvreader.py - is a simple python script that reads the native csv
 
 find-ip-using-pandas.py - similar to above, using pandas dataframes.
 
-readgeoip-addCIDR - suppliments the ip geolocation file by adding the beginning 'mark' and the ending 'mark' so you search by range.  The output creates a new CSV file.
+readgeoip-addCIDR - suppliments the ip geolocation file by adding the beginning 'mark' and the ending 'mark' so you search by range. The output creates a new CSV file.
 
 readgeoip - searches the file created by find-ip-using-csvreader.py without conversion.
 

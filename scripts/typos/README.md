@@ -1,3 +1,3 @@
-TYposquatting data feed scripts 
+TYposquatting data feed scripts
 
 Professional.Services@whoisxmlapi.com

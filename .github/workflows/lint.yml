@@ -1,0 +1,24 @@
+name: Lint
+
+# Caller for the reusable lint workflow in topcoder1/ci-workflows.
+# Runs actionlint on .github/workflows/*.yml and prettier --check on **/*.md.
+#
+# To customize per-project, set inputs below. Examples:
+#   markdown_glob: 'docs/**/*.md'    # only lint docs/ markdown
+#   run_prettier: false              # actionlint only
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    uses: topcoder1/ci-workflows/.github/workflows/lint.yml@main
+    # with:
+    #   markdown_glob: '**/*.md'
+    #   run_actionlint: true
+    #   run_prettier: true

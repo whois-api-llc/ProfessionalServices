@@ -10,6 +10,7 @@ A practical cybersecurity workshop that teaches threat hunting techniques by ana
 ## 📋 Overview
 
 This workshop provides hands-on experience with:
+
 - **Big data processing** - Efficiently analyze millions of DNS TXT records
 - **Threat hunting** - Two-phase analysis strategy (fast scan → deep analysis)
 - **Email security** - Understanding SPF, DKIM, and DMARC
@@ -18,12 +19,14 @@ This workshop provides hands-on experience with:
 ### What is an SPF Onion?
 
 An SPF Onion is a complex SPF (Sender Policy Framework) record where:
+
 - Multiple `include:` directives create deep chains
 - Total DNS lookups exceed the RFC 7208 limit of 10
 - Records become unmanageable and pose security risks
 - Often used by phishers to obfuscate infrastructure
 
 **Real-world example from the wild:**
+
 ```
 suspicious-domain.com
 └─ include:layer1.dynu.net
@@ -31,13 +34,14 @@ suspicious-domain.com
    │  └─ include:layer3a.freeddns.org (and more...)
    └─ include:layer2b.casacam.net
       └─ include:layer3b.kozow.com (and more...)
-      
+
 Total: 18 DNS lookups (RFC limit: 10) ❌
 ```
 
 ## 🎯 Learning Objectives
 
 Students will learn:
+
 1. How to process millions of records efficiently
 2. Multi-phase threat hunting strategies
 3. DNS protocol and SPF record structure
@@ -83,18 +87,21 @@ python -i spf_labs_working.py
 ## 📚 Workshop Structure
 
 ### Phase 1: Fast Scan (3-5 minutes)
+
 - Stream through ALL records (memory efficient)
 - Pattern matching only (no DNS lookups)
 - Identify suspicious candidates
 - **Output:** `candidates.csv`
 
 ### Phase 2: Deep Analysis (10-20 minutes)
+
 - DNS lookups on candidates only
 - Recursive chain following
 - Count actual DNS lookups
 - **Output:** List of RFC violations
 
 ### Phase 3: Reporting (1-2 minutes)
+
 - Executive summary
 - Technical findings
 - Remediation recommendations
@@ -165,6 +172,7 @@ spf-onion-labs/
 **Format:** Hands-on coding labs
 
 **Timeline:**
+
 - 00:00-00:10 - Introduction & setup
 - 00:10-00:25 - Lab 1: Fast scanning
 - 00:25-00:50 - Lab 2: Deep analysis
@@ -173,6 +181,7 @@ spf-onion-labs/
 ## 🔍 Real-World Applications
 
 This workshop teaches techniques applicable to:
+
 - **Email security auditing** - Analyze your organization's SPF records
 - **Threat intelligence** - Identify phishing infrastructure
 - **Incident response** - Investigate suspicious domains
@@ -190,17 +199,18 @@ This workshop teaches techniques applicable to:
 
 Tested on MacBook Pro (M1, 16GB RAM):
 
-| Phase | Records | Time | Rate |
-|-------|---------|------|------|
-| Phase 1 (scan) | 6,800,000 | 3.4 min | 33,000/sec |
-| Phase 2 (analysis) | 1,247 | 8.4 min | 2.5/sec |
-| Total | 6,800,000 | 11.8 min | - |
+| Phase              | Records   | Time     | Rate       |
+| ------------------ | --------- | -------- | ---------- |
+| Phase 1 (scan)     | 6,800,000 | 3.4 min  | 33,000/sec |
+| Phase 2 (analysis) | 1,247     | 8.4 min  | 2.5/sec    |
+| Total              | 6,800,000 | 11.8 min | -          |
 
 DNS queries: 412 unique, 95.8% cache hit rate
 
 ## 🤝 Contributing
 
 Contributions welcome! Please:
+
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
@@ -210,18 +220,16 @@ Contributions welcome! Please:
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
 
-
 ## 🙏 Acknowledgments
 
 - WHOISXMLAPI.com for DNS data and tools
 - RFC 7208 (SPF specification)
 - The cybersecurity community
-- Provided "AS-IS" by:  WHOIS API, Inc.   www.whoisxmlapi.com
+- Provided "AS-IS" by: WHOIS API, Inc. www.whoisxmlapi.com
 - Product: DNS Database
-- Developers: 
-         ed.gibbs@whoisxmlapi.com
-         alex.ronquillo@whoisxmlapi.com, VP of Products
-  
+- Developers:
+  ed.gibbs@whoisxmlapi.com
+  alex.ronquillo@whoisxmlapi.com, VP of Products
 - Authors of the original paper, "The SPF Onion - Enter the World of SPF Chaos"
 - [Original Document](https://main.whoisxmlapi.com/blog/the-spf-onion-enter-the-world-of-spf-chaos)
 - Ed Gibbs [LinkedIn](https://www.linkedin.com/in/edgibbs/) and Jeff Vogelpohl [LinkedIn](https://www.linkedin.com/in/jeffvogelpohl/)
