@@ -1,0 +1,27 @@
+name: Claude-author Auto-merge
+
+# Auto-enables `gh pr merge --auto --squash` on PRs authored by Claude
+# (branch `claude/*`, `Co-Authored-By: Claude` trailer, or `auto-merge`
+# label) — unless the diff touches a risk-tier path category from your
+# global CLAUDE.md policy. See:
+# https://github.com/topcoder1/ci-workflows/blob/main/.github/workflows/claude-author-automerge.yml
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review, labeled]
+
+# Reusable workflow's job-level permissions are CAPPED by these.
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: claude-author-automerge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  automerge:
+    uses: topcoder1/ci-workflows/.github/workflows/claude-author-automerge.yml@main
+    secrets: inherit
+    with:
+      merge_method: squash
