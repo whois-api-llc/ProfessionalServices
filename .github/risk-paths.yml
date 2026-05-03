@@ -1,0 +1,95 @@
+# Risk classification rules for the path classifier.
+#
+# Consumed by topcoder1/ci-workflows/.github/workflows/pr-classify.yml. The
+# classifier resolves to the HIGHEST class matched by any changed file:
+#   blocked > sensitive > standard > safe_test > safe_deps > safe_config > trivial
+#
+# Files matching no pattern fall through to `standard` (gets normal Claude
+# review pipeline, no Codex). `sensitive` triggers an extra Codex review for
+# vendor diversity on high-impact code paths.
+#
+# === CUSTOMIZE THE `sensitive:` LIST FOR THIS REPO ===
+# The starter list below catches generic high-risk patterns. Add the
+# repo-specific paths where bugs actually hurt: api, db, schema, scanning,
+# auth, billing, customer-facing classification logic, etc.
+#
+# When adding a sensitive path, also add it to .github/CODEOWNERS so the
+# CODEOWNER human-review gate matches the auto-merge gate. Drift between
+# the two files defeats the purpose.
+
+blocked:
+  - 'Dockerfile*'
+  - 'docker-compose*.yaml'
+  - 'docker-compose*.yml'
+  - '**/.env*'
+  - '**/secrets*'
+  - '.github/workflows/**'
+  - '.github/risk-paths.yml'
+  - '.github/CODEOWNERS'
+  - 'infra/**'
+  - 'terraform/**'
+  - 'k8s/**'
+
+sensitive:
+  # CUSTOMIZE: paths where bugs cause customer-visible regressions, data
+  # loss, security exposure, or production outage. Examples below — adjust
+  # for the repo's actual layout.
+  #
+  # - 'src/**/api/**'           # public API surface
+  # - 'src/**/db/**'            # schema, models, migrations
+  # - 'migrations/**'
+  # - 'alembic/**'
+  # - 'src/**/auth/**'          # authn / authz
+  # - 'src/**/billing/**'       # payment / pricing
+  # - 'src/**/scanning/**'      # production runners
+  # - 'scripts/rotate_*.py'     # credential rotation
+
+# safe_test: failing tests can't ship; passing tests can't break runtime.
+safe_test:
+  - 'tests/**'
+  - '**/test_*.py'
+  - '**/*_test.py'
+  - '**/*.test.ts'
+  - '**/*.test.js'
+  - '**/*.spec.ts'
+  - '**/*.spec.js'
+  - '**/__tests__/**'
+
+# safe_deps: dependency manifests. Dependabot patch+minor are auto-merged
+# separately; humans editing manifests may add/remove deps semantically
+# but those still get the standard Claude review pipeline.
+safe_deps:
+  - 'pyproject.toml'
+  - 'uv.lock'
+  - 'requirements*.txt'
+  - 'package.json'
+  - 'package-lock.json'
+  - 'pnpm-lock.yaml'
+  - 'go.mod'
+  - 'go.sum'
+  - 'Cargo.toml'
+  - 'Cargo.lock'
+  - 'Gemfile'
+  - 'Gemfile.lock'
+
+# safe_config: tooling only; failures surface in lint/check immediately.
+safe_config:
+  - 'ruff.toml'
+  - '.ruff.toml'
+  - 'pre-commit*.yaml'
+  - '.pre-commit-config.yaml'
+  - '.editorconfig'
+  - '.vscode/**'
+  - 'mypy.ini'
+  - 'pytest.ini'
+  - 'eslint.config.*'
+  - 'prettier.*'
+  - '.prettierrc*'
+
+# trivial: zero runtime impact.
+trivial:
+  - '**/*.md'
+  - 'LICENSE'
+  - '.gitignore'
+  - '.github/ISSUE_TEMPLATE/**'
+  - 'docs/**'
