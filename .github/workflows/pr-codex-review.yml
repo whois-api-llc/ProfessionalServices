@@ -1,0 +1,45 @@
+name: PR Codex Review
+
+# OpenAI Codex CLI as a third-party reviewer for vendor diversity.
+# Runs on risk:sensitive AND risk:blocked PRs (per .github/risk-paths.yml).
+# Pairs with Claude Review (every PR via pr-review.yml) for independent-model
+# coverage on high-impact code paths.
+#
+# Why blocked is included: blocked-path PRs (workflows, Dockerfile, secrets,
+# CODEOWNERS, risk-paths.yml) require admin-bypass merge by design — the
+# classifier exits 1 to force human attention. Without this widening, those
+# PRs ship with ZERO automated review. Now Codex runs alongside the failing
+# classifier so the bypass is informed, not blind.
+#
+# Output propagation: the reusable pr-classify.yml writes risk_class to
+# GITHUB_OUTPUT BEFORE its `exit 1` step, so `needs.classify.outputs.risk_class`
+# is available even when the classify job fails. `!cancelled()` overrides
+# the default needs-skip-on-upstream-failure behavior while still bailing
+# on workflow cancellation.
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: codex-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  classify:
+    if: github.event.pull_request.draft == false
+    uses: topcoder1/ci-workflows/.github/workflows/pr-classify.yml@main
+
+  review:
+    needs: classify
+    if: |
+      !cancelled() &&
+      (needs.classify.outputs.risk_class == 'sensitive' ||
+       needs.classify.outputs.risk_class == 'blocked')
+    uses: topcoder1/ci-workflows/.github/workflows/codex-review.yml@main
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}

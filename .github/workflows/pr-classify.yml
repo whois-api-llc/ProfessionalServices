@@ -1,0 +1,23 @@
+name: PR Classify
+
+# Classifies each PR's risk based on the paths changed (rules in
+# .github/risk-paths.yml). Sets a risk:<class> label on the PR and exposes
+# the class as a job output for downstream gating workflows
+# (pr-codex-review.yml).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: pr-classify-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  classify:
+    if: github.event.pull_request.draft == false
+    uses: topcoder1/ci-workflows/.github/workflows/pr-classify.yml@main
