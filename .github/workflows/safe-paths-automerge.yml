@@ -1,0 +1,30 @@
+name: Safe-paths Auto-merge
+
+# Auto-enables `gh pr merge --auto --squash` on any PR (any author) whose
+# diff touches ONLY safe paths (docs, tests, test_*.py / *_test.* /
+# *.test.* / *.spec.* / **/__tests__/**). All-or-nothing: one unsafe
+# file in the diff and this workflow no-ops, deferring to
+# claude-author-automerge.yml (or manual click).
+#
+# Branch protection's required-status-checks still apply — auto-merge
+# waits for them. Reusable defined at:
+#   topcoder1/ci-workflows/.github/workflows/safe-paths-automerge.yml
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: safe-paths-automerge-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  automerge:
+    uses: topcoder1/ci-workflows/.github/workflows/safe-paths-automerge.yml@main
+    secrets: inherit
+    with:
+      merge_method: squash
