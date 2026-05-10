@@ -14,8 +14,16 @@ name: Prettier Autofix
 # write`, `Pull-requests: read and write`. Pushes by the default
 # GITHUB_TOKEN do NOT retrigger pull_request workflows, so a real
 # PAT is required for the autofix to clear the red lint check.
-# Wired via `secrets: inherit` below — picks up the existing
-# AUTOMERGE_PAT automatically without per-caller plumbing.
+#
+# Why explicit secret pass instead of `secrets: inherit`: GitHub's
+# `secrets: inherit` does NOT propagate across organization boundaries
+# when calling a reusable in a different org's repo. Since
+# `topcoder1/ci-workflows` is called from both `topcoder1/*` and
+# `whois-api-llc/*` repos, explicit pass is the only pattern that
+# works in both contexts. Verified 2026-05-10: same-org `secrets:
+# inherit` worked on topcoder1/ipgeo_core; cross-org failed at
+# startup on whois-api-llc/wxa-graph with "Secret automerge_pat is
+# required, but not provided while calling."
 
 on:
   pull_request:
@@ -31,7 +39,8 @@ permissions:
 jobs:
   prettier-autofix:
     uses: topcoder1/ci-workflows/.github/workflows/prettier-autofix.yml@main
-    secrets: inherit
+    secrets:
+      automerge_pat: ${{ secrets.AUTOMERGE_PAT }}
     # with:
     #   markdown_glob: '**/*.md'
     #   changed_only: true
