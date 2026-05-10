@@ -1,0 +1,39 @@
+name: Prettier Autofix
+
+# Caller for the reusable prettier-autofix workflow in topcoder1/ci-workflows.
+# When a PR lands with markdown formatting drift, this workflow runs
+# `prettier --write` on the PR-changed *.md files and pushes the fix
+# back as a `style: prettier auto-fix` commit. The downstream lint
+# check then re-runs on the new SHA and goes green automatically.
+#
+# Pairs with `lint.yml` (the read-only check). Keep `markdown_glob` and
+# `changed_only` in sync between the two.
+#
+# Required repo secret: `AUTOMERGE_PAT` — same secret consumed by
+# `claude-author-automerge.yml`. Required scopes: `Contents: read and
+# write`, `Pull-requests: read and write`. Pushes by the default
+# GITHUB_TOKEN do NOT retrigger pull_request workflows, so a real
+# PAT is required for the autofix to clear the red lint check.
+# Wired via `secrets: inherit` below — picks up the existing
+# AUTOMERGE_PAT automatically without per-caller plumbing.
+
+on:
+  pull_request:
+
+permissions:
+  # The reusable's checkout step uses the PAT for auth, but `contents: write`
+  # at the caller level is still needed to allow the runner to perform the
+  # push at all. `pull-requests: read` is needed for the changed-files
+  # API call.
+  contents: write
+  pull-requests: read
+
+jobs:
+  prettier-autofix:
+    uses: topcoder1/ci-workflows/.github/workflows/prettier-autofix.yml@main
+    secrets: inherit
+    # with:
+    #   markdown_glob: '**/*.md'
+    #   changed_only: true
+    #   install_node_deps: true
+    #   commit_message: 'style: prettier auto-fix'
