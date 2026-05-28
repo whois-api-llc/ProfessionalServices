@@ -1,0 +1,35 @@
+name: wxacoeur Auto-merge Label
+
+# Applies the `auto-merge` label to PRs opened by the wxacoeur editor
+# account (the Professional Services web-UI editor). The Claude-author
+# Auto-merge workflow then enables GitHub auto-merge.
+#
+# The required `review / Claude Review` check and the risk-path gate in
+# claude-author-automerge.yml STILL apply — so auth/secrets/infra/workflow
+# changes are NOT auto-merged even for this account.
+#
+# Why this exists: `main` is branch-protected, so the GitHub web editor
+# cannot commit directly — it forces a new branch + PR. Without this, a
+# non-developer editor's PRs sit open until a human clicks Merge (and
+# abandoned edits pile up as orphan branches). This closes that gap while
+# keeping the review gate intact.
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  label:
+    if: github.event.pull_request.user.login == 'wxacoeur'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add auto-merge label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+        run: gh pr edit "$PR" --repo "$REPO" --add-label auto-merge
