@@ -1,4 +1,4 @@
-# WhoisXML Domain Info DB Downloader 
+# WhoisXML Domain Info DB Downloader
 
 Two interchangeable command-line tools for downloading the [WhoisXML API](https://www.whoisxmlapi.com/)
 **Domain Info DB** weekly files for one or more dates from the download portal
@@ -112,19 +112,19 @@ wxa_domaininfo_dl.(py|sh) --user USER [--password PASS] --date YYYY-MM-DD --path
 
 ### Options
 
-| Option | Required | Description |
-| --- | --- | --- |
-| `--user`, `--username` | yes | HTTP Basic auth username. |
-| `--password` | no | Password. Falls back to `$WXA_DL_PASSWORD`, then prompt. |
-| `--date YYYY-MM-DD` | yes | Date to match in file names. **Repeatable** for multiple dates. |
-| `--path DIR` | yes | Destination directory (created if missing). |
-| `--url URL` | no | Base autoindex URL. Default: `https://download.whoisxmlapi.com/domaininfodb/`. |
-| `--include SUBSTR` | no | Only download files whose name contains `SUBSTR`. |
-| `--exclude SUBSTR` | no | Skip files whose name contains `SUBSTR`. |
-| `--no-resume` | no | Re-download from scratch instead of resuming `.part` files. |
-| `--retries N` | no | Retry attempts per file on network error / truncation. Default: `5`. |
-| `--dry-run` | no | List the files that would be downloaded, then exit. |
-| `-h`, `--help` | no | Show help. |
+| Option                 | Required | Description                                                                    |
+| ---------------------- | -------- | ------------------------------------------------------------------------------ |
+| `--user`, `--username` | yes      | HTTP Basic auth username.                                                      |
+| `--password`           | no       | Password. Falls back to `$WXA_DL_PASSWORD`, then prompt.                       |
+| `--date YYYY-MM-DD`    | yes      | Date to match in file names. **Repeatable** for multiple dates.                |
+| `--path DIR`           | yes      | Destination directory (created if missing).                                    |
+| `--url URL`            | no       | Base autoindex URL. Default: `https://download.whoisxmlapi.com/domaininfodb/`. |
+| `--include SUBSTR`     | no       | Only download files whose name contains `SUBSTR`.                              |
+| `--exclude SUBSTR`     | no       | Skip files whose name contains `SUBSTR`.                                       |
+| `--no-resume`          | no       | Re-download from scratch instead of resuming `.part` files.                    |
+| `--retries N`          | no       | Retry attempts per file on network error / truncation. Default: `5`.           |
+| `--dry-run`            | no       | List the files that would be downloaded, then exit.                            |
+| `-h`, `--help`         | no       | Show help.                                                                     |
 
 ---
 
@@ -222,11 +222,11 @@ finish it.
 
 ## Exit codes
 
-| Code | Meaning |
-| --- | --- |
-| `0` | All matched files downloaded (or already present) successfully. |
-| `1` | No files matched the date(s), or some files failed to download. |
-| `2` | Usage error, authentication failure (401), or the index could not be fetched. |
+| Code | Meaning                                                                       |
+| ---- | ----------------------------------------------------------------------------- |
+| `0`  | All matched files downloaded (or already present) successfully.               |
+| `1`  | No files matched the date(s), or some files failed to download.               |
+| `2`  | Usage error, authentication failure (401), or the index could not be fetched. |
 
 This makes the tools safe to drive from cron or a wrapper: check `$?` and alert
 on non-zero.
@@ -237,11 +237,11 @@ on non-zero.
 
 For reference, the dated files you'll typically retrieve:
 
-| Pattern | Contents | Approx. size |
-| --- | --- | --- |
-| `domain_info.<date>.weekly.jsonl.zst` | Full WHOIS/domain records, one JSON object per line, Zstandard-compressed. | ~200–240 GB |
-| `domain_names.<date>.weekly.csv.zst` | Domain name list, CSV, Zstandard-compressed. | ~4–5 GB |
-| `stats.<date>.weekly.txt` | Weekly summary statistics. | KB–MB |
+| Pattern                               | Contents                                                                   | Approx. size |
+| ------------------------------------- | -------------------------------------------------------------------------- | ------------ |
+| `domain_info.<date>.weekly.jsonl.zst` | Full WHOIS/domain records, one JSON object per line, Zstandard-compressed. | ~200–240 GB  |
+| `domain_names.<date>.weekly.csv.zst`  | Domain name list, CSV, Zstandard-compressed.                               | ~4–5 GB      |
+| `stats.<date>.weekly.txt`             | Weekly summary statistics.                                                 | KB–MB        |
 
 To decompress a `.zst` file: `zstd -d file.jsonl.zst` (install `zstd` if needed).
 
