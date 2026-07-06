@@ -1,13 +1,21 @@
 name: Prettier Autofix
 
 # Caller for the reusable prettier-autofix workflow in topcoder1/ci-workflows.
-# When a PR lands with markdown formatting drift, this workflow runs
-# `prettier --write` on the PR-changed *.md files and pushes the fix
-# back as a `style: prettier auto-fix` commit. The downstream lint
-# check then re-runs on the new SHA and goes green automatically.
+# When a PR lands with formatting drift, this workflow runs
+# `prettier --write` on the PR-changed files matching the reusable's
+# default glob `**/*.{md,yml,yaml,json}` — markdown, YAML, and JSON,
+# not just markdown (the `markdown_glob` input name is historical) —
+# and pushes the fix back as a `style: prettier auto-fix` commit. The
+# downstream lint check then re-runs on the new SHA and goes green
+# automatically.
 #
-# Pairs with `lint.yml` (the read-only check). Keep `markdown_glob` and
-# `changed_only` in sync between the two.
+# Pairs with `lint.yml` (the read-only check), but note the lint
+# check's default scope is `**/*.md` only — autofix rewrites YAML/JSON
+# files lint never flags. To exempt a file from autofix (e.g. a
+# generated artifact like docs/openapi.json), add it to
+# `.prettierignore`. If you override `markdown_glob` or `changed_only`
+# here, mirror the values in `lint.yml` so the check and the fixer
+# agree.
 #
 # Required repo secret: `AUTOMERGE_PAT` — same secret consumed by
 # `claude-author-automerge.yml`. Required scopes: `Contents: read and
@@ -42,7 +50,7 @@ jobs:
     secrets:
       automerge_pat: ${{ secrets.AUTOMERGE_PAT }}
     # with:
-    #   markdown_glob: '**/*.md'
+    #   markdown_glob: '**/*.{md,yml,yaml,json}'
     #   changed_only: true
     #   install_node_deps: true
     #   commit_message: 'style: prettier auto-fix'
