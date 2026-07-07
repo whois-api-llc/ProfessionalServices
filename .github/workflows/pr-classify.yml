@@ -13,8 +13,18 @@ permissions:
   contents: read
   pull-requests: write
 
+# The group key partitions runs by the payload's draft flag, not just
+# per-PR. A `synchronize` run whose payload was snapshotted while the PR
+# was still draft is a guaranteed no-op (the draft gate below), yet in a
+# shared group it can cancel — or, if queued, replace regardless of
+# cancel-in-progress — the ready_for_review run, so classify never ran
+# and the PR merged unlabeled (attaxion_dev#303, 2026-07-06).
+# Quarantining draft-payload runs in their own group fixes that while
+# non-draft runs keep today's supersede semantics: a newer push still
+# cancels an in-flight stale run before it can label from pre-push
+# state.
 concurrency:
-  group: pr-classify-${{ github.event.pull_request.number }}
+  group: pr-classify-${{ github.event.pull_request.number }}-${{ github.event.pull_request.draft && 'draft' || 'live' }}
   cancel-in-progress: true
 
 jobs:
