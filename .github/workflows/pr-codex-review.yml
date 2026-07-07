@@ -26,16 +26,30 @@ name: PR Codex Review
 # needs-skip-on-upstream-failure behavior while still bailing on workflow
 # cancellation.
 
+# ready_for_review is required in the type list: every draft-phase run
+# (opened, synchronize) skips on the draft gate below, so without it a PR
+# opened as draft and later marked ready never gets Codex review — the
+# ready click fires no run, and only an incidental post-ready push would.
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
   pull-requests: write
 
+# The group key partitions runs by the payload's draft flag, not just
+# per-PR. A `synchronize` run whose payload was snapshotted while the PR
+# was still draft is a guaranteed no-op (the draft gate below), yet in a
+# shared group it can cancel — or, if queued, replace regardless of
+# cancel-in-progress — the ready_for_review run, so a sensitive/blocked
+# PR taken draft → ready would still merge with zero Codex review (same
+# race as pr-classify.yml, attaxion_dev#303, 2026-07-06).
+# Quarantining draft-payload runs in their own group fixes that while
+# non-draft runs keep today's supersede semantics: a newer push still
+# cancels an in-flight stale run before it can review pre-push state.
 concurrency:
-  group: codex-${{ github.event.pull_request.number }}
+  group: codex-${{ github.event.pull_request.number }}-${{ github.event.pull_request.draft && 'draft' || 'live' }}
   cancel-in-progress: true
 
 jobs:
