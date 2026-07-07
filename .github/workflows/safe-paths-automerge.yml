@@ -18,8 +18,17 @@ permissions:
   contents: write
   pull-requests: write
 
+# The group key partitions runs by the payload's draft flag, not just
+# per-PR. A stale draft-payload `synchronize` run is a guaranteed no-op
+# (the reusable's draft gate), yet in a shared group it can cancel (or
+# replace, if queued) the ready_for_review run, leaving auto-merge
+# silently un-enabled (same race as pr-classify.yml — attaxion_dev#303,
+# 2026-07-06). Quarantining draft-payload runs fixes that while
+# non-draft runs keep today's supersede semantics: a newer push still
+# cancels an in-flight stale run before it can arm auto-merge from
+# pre-push state.
 concurrency:
-  group: safe-paths-automerge-${{ github.event.pull_request.number }}
+  group: safe-paths-automerge-${{ github.event.pull_request.number }}-${{ github.event.pull_request.draft && 'draft' || 'live' }}
   cancel-in-progress: true
 
 jobs:
