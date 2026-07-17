@@ -2,7 +2,7 @@ name: PR Review
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, ready_for_review]
     # No paths-ignore by default. Claude self-skips docs/config-only diffs
     # via the reusable workflow's prompt and posts a "Skipped: ..." summary,
     # which keeps the review/Claude Review check green. Adding paths-ignore
