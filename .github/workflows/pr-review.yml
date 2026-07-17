@@ -29,4 +29,4 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
     with:
       # Optional: project-specific focus appended to the base prompt.
-      review_focus: ''
+      review_focus: ""
