@@ -1,3 +1,4 @@
+#!/bin/bash
 # Example of how to read the typo-squatting data feed provided by WHOISXMLAPI.COM
 # ed@whoisxmlapi.com
 #

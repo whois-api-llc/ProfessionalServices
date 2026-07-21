@@ -3,7 +3,7 @@ wGetoutput="--quiet"
 runYear=$1
 startMonth=$2
 endMonth=$3
-WXAKEY=<YOURAPIKEY>"
+WXAKEY="<YOURAPIKEY>"
 echo "Downloading Typosquatting Data Feed for $runYear $startMonth $endMonth"
 typoendpoint="https://typosquatting.whoisxmlapi.com/datafeeds/Typosquatting_DataFeed/"
 for ((i=${startMonth}; i<=${endMonth}; i++))

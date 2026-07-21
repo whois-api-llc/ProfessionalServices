@@ -45,7 +45,7 @@ do
 
 	quarterlyYear[$tmp]+=$qStartYear
 
-	for months in ${qMonths[@]}; do
+	for months in "${qMonths[@]}"; do
 		dmt=${quarterlyYear[$tmp]}"$months$qReleaseDay"
 		#echo "Date=[$dmt] Version=[${quarterlyVersion[$tmp]}"
 	done
