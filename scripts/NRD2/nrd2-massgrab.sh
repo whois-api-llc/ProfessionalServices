@@ -12,7 +12,7 @@ runMonth=$2
 begDay=$3
 endDay=$4
 
-WXAKEY=<Your_API_Key>
+WXAKEY="<Your_API_Key>"
 
 echo "Downloading NRD2 Data Feed for $runMonth $begDay through $endDay"
 

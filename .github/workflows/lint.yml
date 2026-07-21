@@ -21,6 +21,9 @@ permissions:
 jobs:
   lint:
     uses: topcoder1/ci-workflows/.github/workflows/lint.yml@main
+    with:
+      # Shellcheck standalone scripts (reusable default is off; severity=error, paths '.').
+      run_shellcheck_scripts: true
     # with:
     #   markdown_glob: '**/*.md'
     #   run_actionlint: true

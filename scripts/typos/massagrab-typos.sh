@@ -5,7 +5,7 @@ runMonth=$2
 begDay=$3
 endDay=$4
 # SET your api key or change code to use environmental variable
-WXAKEY=<YourAPIKey>
+WXAKEY="<YourAPIKey>"
 echo "Downloading Typosquatting Data Feed for $runMonth $begDay through $endDay"
 typoendpoint="https://typosquatting.whoisxmlapi.com/datafeeds/Typosquatting_DataFeed/"
 for ((i=${begDay}; i<=${endDay}; i++))

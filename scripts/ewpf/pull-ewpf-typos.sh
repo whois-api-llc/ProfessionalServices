@@ -5,7 +5,7 @@ runMonth=$2
 begDay=$3
 endDay=$4
 # SET your api key or change code to use environmental variable
-WXAKEY=<YOUR_API_KEY>
+WXAKEY="<YOUR_API_KEY>"
 echo "Downloading Data Feed for $runMonth $begDay through $endDay"
 ewpfendpoint="https://threat-prediction.whoisxmlapi.com/datafeeds/Early_Warning_Phishing_Data_Feed/"
 for ((i=${begDay}; i<=${endDay}; i++))
