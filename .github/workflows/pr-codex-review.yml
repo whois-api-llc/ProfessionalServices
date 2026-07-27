@@ -68,3 +68,36 @@ jobs:
     uses: topcoder1/ci-workflows/.github/workflows/codex-review.yml@main
     secrets:
       OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+  # risk:standard — the class that was reaching main with no second-model read.
+  # `standard` is the FALLBACK for any path matching no rule in risk-paths.yml
+  # AND the class claude-author-automerge.yml will auto-merge, so it was the
+  # largest body of unreviewed code. Precedent: whois-api-llc/wxa_vpn#1270
+  # (+839 lines under src/**) and #1273 (+786) were both `standard`, both
+  # passed CI clean, and a manual Codex run on #1270 afterwards found four
+  # P1s including a forgeable-identity security hole.
+  #
+  # THE JOB ID IS A SECURITY BOUNDARY — do NOT fold this into `review`.
+  # The published check is "<job id> / Codex Review", and
+  # claude-author-automerge.yml's `codex_check_name` (default
+  # "review / Codex Review", not overridden in this repo) names the check
+  # whose SUCCESS bypasses the risk-tier manual-merge gate. That bypass
+  # trusts a CONCLUSION, not a review: when codex-gate.mjs skips (diff under
+  # its size threshold, or docs/tests-only) the review steps skip but the job
+  # still concludes `success`. Routing `standard` through `review` would let a
+  # SMALL change to an auth/billing/migration path — classified `standard`
+  # because it is not in this repo's `sensitive:` list, yet flagged risky=1 by
+  # the central regex — auto-merge with Codex having read nothing.
+  # `review_standard` matches no codex_check_name: coverage, no new bypass.
+  #
+  # ADVISORY, not a merge gate: not in any required-checks ruleset, so a
+  # standard PR can merge before this finishes. Spend is bounded by
+  # codex-gate.mjs (small-diff and docs/tests-only skips).
+  review_standard:
+    needs: codex-classify
+    if: |
+      !cancelled() &&
+      needs.codex-classify.outputs.risk_class == 'standard'
+    uses: topcoder1/ci-workflows/.github/workflows/codex-review.yml@main
+    secrets:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
