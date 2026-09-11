@@ -182,6 +182,8 @@ The output file is opened in write mode at startup. Running the program again wi
 | `Last record` grows but connection remains green | The socket is open but no valid records have been parsed recently. A keep-alive should appear after the configured idle interval.                                                      |
 | `Stopped: retry limit reached`                   | The client exhausted consecutive reconnect attempts and exited the stream loop. Correct the underlying failure, then restart it.                                                       |
 
+<img width="954" height="424" alt="image" src="https://github.com/user-attachments/assets/a7326e85-c8cc-4bbb-b563-79722d0356dd" />
+
 ## Practical examples
 
 Write default CSV with a 60-second idle ping:
