@@ -10,20 +10,20 @@ The dashboard is designed for long-running monitoring: it keeps the receiver ind
 
 The full-screen terminal dashboard refreshes four times per second and includes:
 
-| Area | Meaning |
-| --- | --- |
-| Connection status | Whether the client is connected and authenticated, connecting, reconnecting, or stopped after exhausting retries. |
-| Runtime | Wall-clock duration since the dashboard started. |
-| Transactions | Number of WebSocket text/binary payloads received. A payload can contain several records. |
-| Records | Total JSON records successfully parsed from payloads. |
-| Written | Number of `added` records successfully flushed to the output file. |
-| Queue | Pending output rows versus the 10,000-row queue capacity. |
-| Last transaction / record | Time elapsed since the last payload or parsed record. |
-| Keep-alives | Count and time of WebSocket pings sent after an idle period. Pongs are listed in Recent events. |
-| Record reasons | Totals for `added`, `discovered`, `updated`, `dropped`, and unrecognized reason values. |
-| Latest stream records | The six most recent parsed records, including time, reason, and domain. These are visible for every reason type, whether or not the record is written to disk. |
-| Connection health | Transmission, JSON decoding, writer, queue-drop, and reconnection counts, plus the most recent error message. |
-| Recent events | Connection, keep-alive, retry, shutdown, and error events. |
+| Area                      | Meaning                                                                                                                                                        |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Connection status         | Whether the client is connected and authenticated, connecting, reconnecting, or stopped after exhausting retries.                                              |
+| Runtime                   | Wall-clock duration since the dashboard started.                                                                                                               |
+| Transactions              | Number of WebSocket text/binary payloads received. A payload can contain several records.                                                                      |
+| Records                   | Total JSON records successfully parsed from payloads.                                                                                                          |
+| Written                   | Number of `added` records successfully flushed to the output file.                                                                                             |
+| Queue                     | Pending output rows versus the 10,000-row queue capacity.                                                                                                      |
+| Last transaction / record | Time elapsed since the last payload or parsed record.                                                                                                          |
+| Keep-alives               | Count and time of WebSocket pings sent after an idle period. Pongs are listed in Recent events.                                                                |
+| Record reasons            | Totals for `added`, `discovered`, `updated`, `dropped`, and unrecognized reason values.                                                                        |
+| Latest stream records     | The six most recent parsed records, including time, reason, and domain. These are visible for every reason type, whether or not the record is written to disk. |
+| Connection health         | Transmission, JSON decoding, writer, queue-drop, and reconnection counts, plus the most recent error message.                                                  |
+| Recent events             | Connection, keep-alive, retry, shutdown, and error events.                                                                                                     |
 
 Press `Ctrl+C` to stop. The receiver is stopped first and the writer then finishes rows already queued for output.
 
@@ -84,16 +84,16 @@ When this option is used, the program immediately re-executes itself with the va
 
 Run `python3 nrd_stream_dashboard.py --help` for the authoritative list.
 
-| Option | Default | Description |
-| --- | --- | --- |
-| `output_file` | Required | Destination file. It is created or overwritten at startup. |
-| `--output-format CSV` | `CSV` | Output format: `CSV` or `JSON`. `JSON` means newline-delimited JSON / NDJSON. The legacy alias `--outputFormat` is also accepted. |
-| `--api-key KEY` | `NRD_API_KEY` environment variable | NRD stream API key. The environment variable is preferred. |
-| `--ws-timeout SECONDS` | `2.0` | Time to wait for a received frame before the receiver checks shutdown and keep-alive timing. |
-| `--connect-timeout SECONDS` | `15.0` | Initial WebSocket connection timeout. |
-| `--keepalive SECONDS` | `30.0` | Idle time after the last stream payload before sending a WebSocket ping. It must be greater than `--ws-timeout`. |
-| `--max-retries N` | `5` | Maximum consecutive reconnect attempts after a connection failure. |
-| `--retry-delay SECONDS` | `5.0` | Delay between reconnect attempts. |
+| Option                      | Default                            | Description                                                                                                                       |
+| --------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `output_file`               | Required                           | Destination file. It is created or overwritten at startup.                                                                        |
+| `--output-format CSV`       | `CSV`                              | Output format: `CSV` or `JSON`. `JSON` means newline-delimited JSON / NDJSON. The legacy alias `--outputFormat` is also accepted. |
+| `--api-key KEY`             | `NRD_API_KEY` environment variable | NRD stream API key. The environment variable is preferred.                                                                        |
+| `--ws-timeout SECONDS`      | `2.0`                              | Time to wait for a received frame before the receiver checks shutdown and keep-alive timing.                                      |
+| `--connect-timeout SECONDS` | `15.0`                             | Initial WebSocket connection timeout.                                                                                             |
+| `--keepalive SECONDS`       | `30.0`                             | Idle time after the last stream payload before sending a WebSocket ping. It must be greater than `--ws-timeout`.                  |
+| `--max-retries N`           | `5`                                | Maximum consecutive reconnect attempts after a connection failure.                                                                |
+| `--retry-delay SECONDS`     | `5.0`                              | Delay between reconnect attempts.                                                                                                 |
 
 The endpoint option is intentionally hidden from normal help but exists for controlled testing:
 
@@ -153,7 +153,11 @@ The built-in CSV writer correctly escapes domains if they contain characters tha
 `--output-format JSON` writes one JSON object per line:
 
 ```json
-{"timestamp": "2026-09-10 14:02:31.184", "reason": "added", "domain": "example.com"}
+{
+  "timestamp": "2026-09-10 14:02:31.184",
+  "reason": "added",
+  "domain": "example.com"
+}
 ```
 
 This is NDJSON, not a single JSON array, so it can be processed incrementally with tools such as `jq`, Logstash, or a streaming parser.
@@ -168,15 +172,15 @@ The output file is opened in write mode at startup. Running the program again wi
 
 ## Error handling and operational interpretation
 
-| Dashboard indication | Meaning / next check |
-| --- | --- |
-| `Transmission errors` increases | A connection, malformed JSON, or writer-related failure occurred. Read `Last error` and Recent events. |
-| `Decode` increases | A line was not valid JSON or did not decode to an object. The bad record is not counted or written. Capture an example before treating it as an upstream contract change. |
-| `Writer` increases | The output file could not be written, or the writer queue overflowed. Check path permissions, free disk space, filesystem health, and output throughput. |
-| `Dropped rows` increases | An `added` record was not written because the queue remained full. This is an output-data-loss signal. |
-| `Reconnects` increases | The client had to reconnect after a socket or transport failure. Check endpoint reachability, proxy/load-balancer idle policies, API-key status, and the service-side connection logs. |
-| `Last record` grows but connection remains green | The socket is open but no valid records have been parsed recently. A keep-alive should appear after the configured idle interval. |
-| `Stopped: retry limit reached` | The client exhausted consecutive reconnect attempts and exited the stream loop. Correct the underlying failure, then restart it. |
+| Dashboard indication                             | Meaning / next check                                                                                                                                                                   |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Transmission errors` increases                  | A connection, malformed JSON, or writer-related failure occurred. Read `Last error` and Recent events.                                                                                 |
+| `Decode` increases                               | A line was not valid JSON or did not decode to an object. The bad record is not counted or written. Capture an example before treating it as an upstream contract change.              |
+| `Writer` increases                               | The output file could not be written, or the writer queue overflowed. Check path permissions, free disk space, filesystem health, and output throughput.                               |
+| `Dropped rows` increases                         | An `added` record was not written because the queue remained full. This is an output-data-loss signal.                                                                                 |
+| `Reconnects` increases                           | The client had to reconnect after a socket or transport failure. Check endpoint reachability, proxy/load-balancer idle policies, API-key status, and the service-side connection logs. |
+| `Last record` grows but connection remains green | The socket is open but no valid records have been parsed recently. A keep-alive should appear after the configured idle interval.                                                      |
+| `Stopped: retry limit reached`                   | The client exhausted consecutive reconnect attempts and exited the stream loop. Correct the underlying failure, then restart it.                                                       |
 
 ## Practical examples
 
