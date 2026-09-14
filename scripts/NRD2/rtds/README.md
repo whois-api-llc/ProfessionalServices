@@ -1,4 +1,4 @@
-# NRD Stream Dashboard
+# NRD Stream Monitoring Dashboard
 
 `nrd_stream_dashboard.py` is a terminal dashboard and file writer for the WHOISXMLAPI Newly Registered Domains (NRD) WebSocket stream.
 
