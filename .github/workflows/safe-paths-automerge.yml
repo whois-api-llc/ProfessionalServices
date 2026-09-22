@@ -34,6 +34,9 @@ concurrency:
 jobs:
   automerge:
     uses: topcoder1/ci-workflows/.github/workflows/safe-paths-automerge.yml@main
-    secrets: inherit
+    # Explicit, never `secrets: inherit`: inherit passes nothing to this
+    # topcoder1-owned reusable, and without the PAT it will not arm.
+    secrets:
+      automerge_pat: ${{ secrets.AUTOMERGE_PAT }}
     with:
       merge_method: squash
