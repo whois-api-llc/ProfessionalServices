@@ -27,6 +27,11 @@ permissions:
 # flag any copy in the Dependabot store.
 jobs:
   auto-merge:
+    # Only a Dependabot-authored PR reaches the PAT-holding reusable; every
+    # other PR, a fork's included, stops here. Gate on the PR's author, never
+    # github.actor: when a person pushes to a Dependabot PR the actor is that
+    # person, and the reusable must still run to revoke the auto-merge arm.
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     uses: topcoder1/ci-workflows/.github/workflows/dependabot-auto-merge.yml@main
     secrets:
       automerge_pat: ${{ secrets.AUTOMERGE_PAT }}
