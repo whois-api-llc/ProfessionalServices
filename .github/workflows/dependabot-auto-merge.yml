@@ -1,7 +1,16 @@
 name: Dependabot Auto-merge
 
+# pull_request_target, NOT pull_request. A run Dependabot triggers on
+# `pull_request` reads ONLY the repo's Dependabot secret store, so the arm
+# could never see AUTOMERGE_PAT without a copy there. A copy there reaches
+# every Dependabot-triggered job that references the secret, and such a job
+# holds it in runner memory while it runs the bumped dependency code
+# (2026-09-26: 16 repos' coverage-floor callers). pull_request_target runs
+# this workflow from the base branch with the Actions secrets. That is safe
+# ONLY because the reusable never checks out or runs PR code: never add a
+# checkout, a build, or anything from the PR to this workflow.
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
 
 # Reusable workflow's job-level permissions are CAPPED by these.
@@ -9,10 +18,18 @@ permissions:
   contents: write
   pull-requests: write
 
+# The PAT is forwarded EXPLICITLY, never via `secrets: inherit`: inherit
+# passes nothing to a reusable owned by another account, so the reusable
+# arms with GITHUB_TOKEN, and a GITHUB_TOKEN-attributed merge fires no push
+# workflows (CI, deploys) — wxa_vpn's deploy.yml skipped 42 Dependabot bumps
+# that way (2026-07-23..09-25). Keep AUTOMERGE_PAT in the Actions store only:
+# install-pr-review.sh sets it, rotate-automerge-pat.sh rotates it, and both
+# flag any copy in the Dependabot store.
 jobs:
   auto-merge:
     uses: topcoder1/ci-workflows/.github/workflows/dependabot-auto-merge.yml@main
-    secrets: inherit # forwards GITHUB_TOKEN explicitly
+    secrets:
+      automerge_pat: ${{ secrets.AUTOMERGE_PAT }}
     with:
       merge_method: squash
       allow_minor: true
