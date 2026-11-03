@@ -2,7 +2,7 @@
 
 A streaming, multiprocessing Python tool for identifying possible brand impersonation and typosquatting patterns in very large hostname datasets.
 
-WHOISXMLAPI.COM 
+WHOISXMLAPI.COM
 
 The scanner is designed for large CSV files, including gzip-compressed input. It checks brand-like strings within individual DNS labels and across contiguous windows of adjacent labels. For example, it can inspect `micro.soft.login.example.com` for a sequence such as `microsoftlogin` rather than checking each label independently.
 
@@ -92,20 +92,20 @@ Tune worker count and batch size against your storage, CPU, and compression thro
 
 ## Command-line options
 
-| Option | Purpose |
-|---|---|
-| `--workers` | Number of worker processes. Default: `40`. |
-| `--batch-size` | Number of CSV records submitted per batch. Default: `5000`. |
-| `--distance` | Maximum Levenshtein edit distance. Default: `1`. |
-| `--compression` | Input compression: `auto`, `none`, `gzip`, or `bz2`. |
-| `--has-header` | Treat the first CSV record as a header row. |
-| `--column` | Zero-based index of the hostname column. Default: `0`. |
-| `--max-labels` | Maximum number of adjacent DNS labels combined into a candidate window. Default: `4`. |
-| `--max-candidates` | Maximum indexed brand candidates considered for a window. Default: `300`. |
-| `--min-brand-length` | Ignore brands shorter than this many characters. Default: `5`. |
-| `--min-score` | Optional minimum RapidFuzz similarity score. Default: `0` (disabled). |
-| `--candidate-mode` | Candidate selection mode: `indexed` or `exhaustive`. Default: `indexed`. |
-| `--progress-every` | Progress reporting interval, in input records. |
+| Option               | Purpose                                                                               |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| `--workers`          | Number of worker processes. Default: `40`.                                            |
+| `--batch-size`       | Number of CSV records submitted per batch. Default: `5000`.                           |
+| `--distance`         | Maximum Levenshtein edit distance. Default: `1`.                                      |
+| `--compression`      | Input compression: `auto`, `none`, `gzip`, or `bz2`.                                  |
+| `--has-header`       | Treat the first CSV record as a header row.                                           |
+| `--column`           | Zero-based index of the hostname column. Default: `0`.                                |
+| `--max-labels`       | Maximum number of adjacent DNS labels combined into a candidate window. Default: `4`. |
+| `--max-candidates`   | Maximum indexed brand candidates considered for a window. Default: `300`.             |
+| `--min-brand-length` | Ignore brands shorter than this many characters. Default: `5`.                        |
+| `--min-score`        | Optional minimum RapidFuzz similarity score. Default: `0` (disabled).                 |
+| `--candidate-mode`   | Candidate selection mode: `indexed` or `exhaustive`. Default: `indexed`.              |
+| `--progress-every`   | Progress reporting interval, in input records.                                        |
 
 Run the script's help output to see the options supported by your local copy:
 
@@ -151,18 +151,18 @@ Run indexed and exhaustive modes against the same sample and compare their resul
 
 The output is a CSV file containing detected matches. Fields include:
 
-| Field | Description |
-|---|---|
-| `input_row` | Logical CSV record number processed by the scanner. |
-| `hostname` | Original hostname from the input. |
-| `registrable_domain` | Registrable domain identified by suffix parsing. |
-| `suffix` | Public suffix identified by `tldextract`. |
-| `suspected_brand` | Brand from the configured brand list. |
-| `detection_method` | Match classification, such as single-label fuzzy or split-label fuzzy. |
-| `matched_substring` | Hostname text that matched the brand candidate. |
-| `similarity_score` | RapidFuzz similarity score for the compared strings. |
-| `edit_distance` | Levenshtein distance for the selected match. |
-| `matched_labels` | DNS labels contributing to the match. |
+| Field                | Description                                                            |
+| -------------------- | ---------------------------------------------------------------------- |
+| `input_row`          | Logical CSV record number processed by the scanner.                    |
+| `hostname`           | Original hostname from the input.                                      |
+| `registrable_domain` | Registrable domain identified by suffix parsing.                       |
+| `suffix`             | Public suffix identified by `tldextract`.                              |
+| `suspected_brand`    | Brand from the configured brand list.                                  |
+| `detection_method`   | Match classification, such as single-label fuzzy or split-label fuzzy. |
+| `matched_substring`  | Hostname text that matched the brand candidate.                        |
+| `similarity_score`   | RapidFuzz similarity score for the compared strings.                   |
+| `edit_distance`      | Levenshtein distance for the selected match.                           |
+| `matched_labels`     | DNS labels contributing to the match.                                  |
 
 `input_row` is a logical CSV record count, not necessarily a physical file line number. This distinction matters when CSV fields contain embedded newlines.
 
