@@ -13,21 +13,66 @@ permissions:
   contents: read
   pull-requests: write
 
-# The group key partitions runs by the payload's draft flag, not just
-# per-PR. A `synchronize` run whose payload was snapshotted while the PR
-# was still draft is a guaranteed no-op (the draft gate below), yet in a
-# shared group it can cancel — or, if queued, replace regardless of
-# cancel-in-progress — the ready_for_review run, so classify never ran
-# and the PR merged unlabeled (attaxion_dev#303, 2026-07-06).
-# Quarantining draft-payload runs in their own group fixes that while
-# non-draft runs keep today's supersede semantics: a newer push still
-# cancels an in-flight stale run before it can label from pre-push
-# state.
+# One concurrency group per PR, and runs QUEUE in it instead of cancelling
+# each other. Every run classifies (the job below has no draft gate) and
+# lists the PR's changed files when it runs, so the run that starts last
+# reads the newest files and writes the risk:* label last: no older run can
+# leave a stale label behind. The label trails the head only while the
+# head's own run is queued or running, and that run turns its required
+# check green only after it has written the label, so nothing that waits
+# for a clean merge state can act on a stale one. The label is read by
+# people, by the babysit-sessions merge digest and, wherever it does not
+# recompute the tier at decision time, by the babysit-prs loop as its merge
+# tier; claude-author-automerge recomputes the class itself and
+# safe-paths-automerge reads no risk label.
+#
+# Each earlier design failed one way. Groups split by the payload's draft
+# flag (this template from 2026-07-06), where live runs never cancelled
+# draft ones, let a late draft-payload run relabel the PR from files it read
+# before a newer push (independent review and Codex pre-review of
+# whois-api-llc/wxa-graph#748, 2026-11-24). One group with
+# cancel-in-progress leaves a `cancelled` classify check whenever a push and
+# `gh pr ready` overlap, which babysit-prs' merge rule refuses on any check;
+# and while a draft gate still skipped the job, a late draft-payload run
+# cancelled the ready run and the PR merged unlabeled (attaxion_dev#303,
+# 2026-07-06).
+#
+# Accepted costs. A newer run waits for the one in progress, runner wait
+# included: well under a minute as a rule (measured on wxa-graph), but up to
+# about 8 min when runners are scarce (a Dependabot burst, 2026-11-23). The
+# shared classifier sets no timeout-minutes, so a hung run holds the queue
+# for up to GitHub's 6 h default: cancel it, then re-run it or push, because
+# a cancelled check left on the head also stops the babysit-prs loop. GitHub
+# keeps one pending run per group; a replaced pending run never starts and
+# leaves no check. So a late event for an older head can replace a newer
+# head's pending run (push, `gh pr ready`, then push again within seconds,
+# with the first push's run created last), and that head gets no classify
+# check and waits at "Expected" until a new push or a close and reopen: a
+# stall, never a pass. This stall is new; the split design avoided it, and
+# it is the price of closing the stale-label path. GitHub's
+# `concurrency.queue: max` would keep every pending run and end it, but the
+# actionlint the required lint pins (1.7.12) rejects the `queue` key; add
+# it once that pin moves to a release that accepts it.
 concurrency:
-  group: pr-classify-${{ github.event.pull_request.number }}-${{ github.event.pull_request.draft && 'draft' || 'live' }}
-  cancel-in-progress: true
+  group: pr-classify-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
 
 jobs:
+  # No `if:` on this job, deliberately — not even a draft gate. The
+  # installers make `classify / Classify PR Risk` a REQUIRED check, and
+  # GitHub judges a required check by the newest-CREATED run of each
+  # workflow on the head commit, not by the newest check of that name. A push
+  # to a draft PR followed a second later by `gh pr ready` can create the
+  # draft-payload run after the ready one; while a draft gate skipped this
+  # job, that newer run carried no such check, so the PR sat at "Expected —
+  # Waiting for status to be reported" although the older run's check was
+  # green. Re-running the older run did not clear it; a new push did
+  # (whois-api-llc/wxa_vpn#2258, 2026-10-16; a scratch-repo experiment
+  # confirmed the rule). Gating inside the reusable is no fix: its check
+  # would report `skipped`, which GitHub counts as passing, so a newer
+  # skipped run would hide an older FAILED classification.
+  # Classifying a draft costs one short job and labels it early;
+  # claude-author-automerge classifies the PR itself and treats a
+  # risk:blocked or risk:sensitive label only as a second signal.
   classify:
-    if: github.event.pull_request.draft == false
     uses: topcoder1/ci-workflows/.github/workflows/pr-classify.yml@main
