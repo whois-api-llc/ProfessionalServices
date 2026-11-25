@@ -1,2 +1,0 @@
-rich>=13.7,<15
-websocket-client>=1.7,<2
